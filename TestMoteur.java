@@ -25,11 +25,11 @@ public class TestMoteur {
 		
 		
 		// Traitement des entrees
-//		moteur.traitementEntrees("abab###");
+		moteur.traitementEntrees("abab###");
 		
 		//test de la fonction transiter sur un fichier testTransiter.descr
 		System.out.println("\nTest de la fonction transiter :");
-		moteur.afficheTransiter();
+		//moteur.afficheTransiter();
 	}
 	
 	public static boolean verificationFichier(String nomFichier) throws IOException{
