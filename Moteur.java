@@ -473,5 +473,18 @@ public class Moteur {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * Partie exportation en .dot
+	 * 
+	 */
+	public void exportationDot() {
+		
+		
+		
+		
+		
+		
+		
+	}
 }
