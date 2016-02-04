@@ -456,21 +456,73 @@ public class Moteur {
 	}	
 	
 	//methode qui implemente la fonction transiter en vue de la determinisation
-	public void transiter(Character etat, Character c){
+	/*public void transiter(Character etat, Character c){
 		for (int i = 0; i < this.getTransitions().size(); i++) {
 			if(this.getTransitions().get(i).getEtatInit().equals(etat) && this.getTransitions().get(i).getEntree().equals(c)){
 				System.out.println("transiter(" + etat + ", " + c + ") = " + this.getTransitions().get(i).getEtatFinal());
 			}
 		}
+	}*/
+	public ArrayList<Etat> transiter(Etat etat, Character c){
+		ArrayList<Etat> e = new ArrayList<Etat>();
+		for (int i = 0; i < this.getTransitions().size(); i++) {
+			if(this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(c)){
+				Etat state = new Etat(this.getTransitions().get(i).getEtatFinal());
+				e.add(state);
+				//System.out.println("transiter(" + etat.getNomEtat() + ", " + c + ") = " + this.getTransitions().get(i).getEtatFinal());
+			}
+		}
+		return e;
 	}
 	
-	public void afficheTransiter(){
+	/*public void afficheTransiter(){
 		for (int i = 0; i < this.getEtats().size(); i++) {
 			for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
 				Character etat = new Character(this.getEtats().get(i).getNomEtat());
 				Character lettre = new Character(this.getAlphabetEntree().get(j));
 				transiter(etat, lettre);
 			}
+		}
+	}*/
+	public void afficheTransiter(ArrayList<Etat> e){
+		for (int i = 0; i < e.size(); i++) {
+			System.out.println("transiter = " + e.get(i).getNomEtat());
+		}
+	}
+	
+	//methode qui implemente le calcul des lambda fermeture
+	public ArrayList<Etat> calculLambdaFermeture(ArrayList<Etat> T){ //etats resultant de transiter
+		ArrayList<Etat> F=new ArrayList<Etat>();
+		ArrayList<Etat> p=new ArrayList<Etat>();
+		Etat e = new Etat(null);
+
+		for(Etat etat : T){ 
+			if(p.isEmpty()){
+				p.add(etat);
+			}else{
+				if(!p.contains(etat))
+					p.add(etat);
+			}
+		}
+		int i=0;
+		while(!p.isEmpty()){
+			if(!F.contains(p.get(i)))
+				F.add(p.get(i));
+			for(Transition t: this.getTransitions()){
+				if(t.getEtatInit() == p.get(i).getNomEtat() && t.getEntree()=='#'){
+					if(!p.contains(t.getSortie()))
+						e.setNomEtat(t.getSortie());
+						p.add(e);
+				}
+			}
+			p.remove(i);
+		}
+		return F;
+	}
+	
+	public void afficheLambdaFermeture(ArrayList<Etat> e){
+		for (int i = 0; i < e.size(); i++) {
+			System.out.println(e.get(i).getNomEtat());
 		}
 	}
 	
