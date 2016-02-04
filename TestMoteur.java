@@ -10,8 +10,9 @@ public class TestMoteur {
 		
 		Moteur moteur = null;
 		
-		if(verificationFichier("testTransiter.descr")){
-			moteur = new Moteur("testTransiter.descr");
+		if(verificationFichier("S4.descr")) {
+			
+			moteur = new Moteur("S4.descr");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
@@ -25,11 +26,14 @@ public class TestMoteur {
 		
 		
 		// Traitement des entrees
-		moteur.traitementEntrees("abab###");
+		//moteur.traitementEntrees("abab###");
 		
 		//test de la fonction transiter sur un fichier testTransiter.descr
-		System.out.println("\nTest de la fonction transiter :");
+		//System.out.println("\nTest de la fonction transiter :");
 		//moteur.afficheTransiter();
+		
+		// Exportation en .dot
+		moteur.exportationDot();
 	}
 	
 	public static boolean verificationFichier(String nomFichier) throws IOException{

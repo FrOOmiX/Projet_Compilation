@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -477,14 +478,42 @@ public class Moteur {
 	 * 
 	 * Partie exportation en .dot
 	 * 
+	 * 
 	 */
-	public void exportationDot() {
+	public void exportationDot() throws IOException {
 		
+		File f = new File("Exportation.dot");
+		FileWriter fw = new FileWriter(f);
 		
+		// Squelette du fichier .dot
+		String squelette = "digraph G {\n\n";
 		
+		// Ecriture du squelette
+		fw.write(squelette);
 		
+		// Ecriture etat initial et labels
+		fw.write("\t\"\" -> " +this.getEtatInit().get(0));
+		fw.write("\n\t" +this.getEtatInit().get(0)+ " -> " +this.getTransitions().get(0).getEtatFinal());
+		fw.write(" [label=\"" +this.getTransitions().get(0).getEntree()+ "/" +this.getTransitions().get(0).getSortie()+ "\"]");
 		
+		// Ecriture autres etats et labels
+		for (int i = 1; i < this.getTransitions().size(); i++) {
+			
+			fw.write("\n\t" +this.getTransitions().get(i).getEtatInit()+ " -> " +this.getTransitions().get(i).getEtatFinal());
+			fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
+		}
 		
+		// Marquage etat initial
+		fw.write("\n\t\"\" [shape=none]");
 		
+		// Marquage etats acceptants
+		for (int i = 0; i < this.getEtatsAcceptants().size(); i++) {
+			
+			fw.write("\n\t" +this.getEtatsAcceptants().get(i)+ " [shape=doublecircle]");
+		}
+		
+		// Fermeture fichier
+		fw.write("\n}");
+		fw.close();
 	}
 }
