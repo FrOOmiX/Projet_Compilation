@@ -10,9 +10,9 @@ public class TestMoteur {
 		
 		Moteur moteur = null;
 		
-		if(verificationFichier("S4.descr")) {
+		if(verificationFichier("ND03.descr")) {
 			
-			moteur = new Moteur("S4.descr");
+			moteur = new Moteur("ND03.descr");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
