@@ -127,11 +127,11 @@ public class Moteur {
 				else if (ligne.charAt(0) == 'T' && i < ligne.length()) {
 								String s [] = ligne.split("\\s");
 								if(s.length == 4){
-									Transition tr = new Transition(s[1],s[2],s[3]);
+								Transition tr = new Transition(s[1],s[2].substring(1, 2),s[3]);
 									transitions.add(tr);
 								}
 								else{
-									Transition tr = new Transition(s[1],s[2],s[3],s[4]);
+									Transition tr = new Transition(s[1],s[2].substring(1, 2),s[3],s[4].substring(1, 2));
 									transitions.add(tr);
 								}
 								ligne = str.readLine();
