@@ -1,13 +1,18 @@
 public class Etat {
 	
-	Character nomEtat;
+	String nomEtat;
+	char nom;
 	
-	public Etat(Character nom) {
+	public Etat(String nom) {
 		
 		this.nomEtat = nom;
 	}
 
-	public Character getNomEtat() { return this.nomEtat; }
+	public Etat(char nom) {
+		this.nom = nom;
+	}
 
-	public void setNomEtat(Character nomEtat) { this.nomEtat = nomEtat; }
+	public String getNomEtat() { return this.nomEtat; }
+
+	public void setNomEtat(String nomEtat) { this.nomEtat = nomEtat; }
 }
