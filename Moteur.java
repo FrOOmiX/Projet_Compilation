@@ -581,40 +581,51 @@ public class Moteur {
 	 * 
 	 * 
 	 */
-	public void exportationDot() throws IOException {
+	public void exportationDot() {
 		
 		File f = new File("Exportation.dot");
-		FileWriter fw = new FileWriter(f);
 		
-		// Squelette du fichier .dot
-		String squelette = "digraph G {\n\n";
-		
-		// Ecriture du squelette
-		fw.write(squelette);
-		
-		// Ecriture etat initial et labels
-		fw.write("\t\"\" -> " +this.getEtatInit().get(0));
-		fw.write("\n\t" +this.getEtatInit().get(0)+ " -> " +this.getTransitions().get(0).getEtatFinal());
-		fw.write(" [label=\"" +this.getTransitions().get(0).getEntree()+ "/" +this.getTransitions().get(0).getSortie()+ "\"]");
-		
-		// Ecriture autres etats et labels
-		for (int i = 1; i < this.getTransitions().size(); i++) {
+		try {
 			
-			fw.write("\n\t" +this.getTransitions().get(i).getEtatInit()+ " -> " +this.getTransitions().get(i).getEtatFinal());
-			fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
-		}
-		
-		// Marquage etat initial
-		fw.write("\n\t\"\" [shape=none]");
-		
-		// Marquage etats acceptants
-		for (int i = 0; i < this.getEtatsAcceptants().size(); i++) {
+			FileWriter fw = new FileWriter(f);
 			
-			fw.write("\n\t" +this.getEtatsAcceptants().get(i)+ " [shape=doublecircle]");
+			// Squelette du fichier .dot
+			String squelette = "digraph G {\n\n";
+			
+			// Ecriture du squelette
+			fw.write(squelette);
+			
+			// Ecriture etat initial et labels
+			for (int i = 0; i < this.getEtatInit().size(); i++) {
+				
+				fw.write("\n\t\"\" -> " +this.getEtatInit().get(i));
+				fw.write("\n\t" +this.getEtatInit().get(i)+ " -> " +this.getTransitions().get(i).getEtatFinal());
+				fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
+			}
+			
+			// Ecriture autres etats et labels
+			for (int i = 1; i < this.getTransitions().size(); i++) {
+				
+				fw.write("\n\t" +this.getTransitions().get(i).getEtatInit()+ " -> " +this.getTransitions().get(i).getEtatFinal());
+				fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
+			}
+			
+			// Marquage etat initial
+			fw.write("\n\t\"\" [shape=none]");
+			
+			// Marquage etats acceptants
+			for (int i = 0; i < this.getEtatsAcceptants().size(); i++) {
+				
+				fw.write("\n\t" +this.getEtatsAcceptants().get(i)+ " [shape=doublecircle]");
+			}
+			
+			// Fermeture fichier
+			fw.write("\n}");
+			fw.close();
+			
+		} catch (IOException e) {
+			
+			System.out.println("Erreur d'ecriture !");
 		}
-		
-		// Fermeture fichier
-		fw.write("\n}");
-		fw.close();
 	}
 }
