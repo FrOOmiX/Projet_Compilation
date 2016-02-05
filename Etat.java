@@ -1,8 +1,9 @@
-
 public class Etat {
+	
 	Character nomEtat;
 	
-	public Etat(Character nom){
+	public Etat(Character nom) {
+		
 		this.nomEtat = nom;
 	}
 

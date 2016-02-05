@@ -192,15 +192,13 @@ public class Moteur {
 	public void afficheMetaChar(){
 		
 			if(this.getMeta() !='#'){
+				
 				System.out.println("Meta caractere : " + this.getMeta());
 				
-			}
-		
-		
-			else{
-			System.out.println("Pas de meta caractere dans ce .descr. Par defaut : " + this.getMeta());
+			} else {
+				
+				System.out.println("Pas de meta caractere dans ce .descr. Par defaut : " + this.getMeta());
 		}
-			
 	}
 
 	public void afficheAlphabetEntree() {
@@ -239,25 +237,34 @@ public class Moteur {
 		}
 	}
 	
-	public void afficherEtats(){
+	public void afficherEtats() {
+		
 		this.etats = new ArrayList<Etat>();
-		if(this.getNbEtats() != 0){
+		
+		if (this.getNbEtats() != 0) {
+			
 			int i = this.getNbEtats() - '0' - 1;
 			String str = "";
-			while(i >= 0){
-				if(i != this.getNbEtats() - '0' - 1){
+			
+			while (i >= 0) {
+				
+				if (i != this.getNbEtats() - '0' - 1) {
+					
 					Etat e = new Etat((char) (i + '0'));
 					this.getEtats().add(e);
 					str += ", " + i ;
-				}else{
+				} else {
+					
 					Etat e = new Etat((char) (i + '0'));
 					this.getEtats().add(e);
 					str += i;
 				}
+				
 				i--;
 			}
 			System.out.println("Les differents etats sont les suivants : " + str + ".");
-		}else{
+		} else {
+			
 			System.out.println("Il n'y a pas d'etats a enumerer.");
 		}
 	}
@@ -471,15 +478,20 @@ public class Moteur {
 	 * Partie determinisation
 	 *
 	 */
-	public ArrayList<Etat> transiter(Etat etat, Character c){
+	public ArrayList<Etat> transiter(Etat etat, Character c) {
+		
 		ArrayList<Etat> e = new ArrayList<Etat>();
+		
 		for (int i = 0; i < this.getTransitions().size(); i++) {
-			if(this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(c)){
+			
+			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(c)) {
+				
 				Etat state = new Etat(this.getTransitions().get(i).getEtatFinal());
 				e.add(state);
 				//System.out.println("transiter(" + etat.getNomEtat() + ", " + c + ") = " + this.getTransitions().get(i).getEtatFinal());
 			}
 		}
+		
 		return e;
 	}
 	
@@ -492,47 +504,77 @@ public class Moteur {
 			}
 		}
 	}*/
-	public void afficheTransiter(ArrayList<Etat> e){
+	public void afficheTransiter(ArrayList<Etat> e) {
+		
 		for (int i = 0; i < e.size(); i++) {
+			
 			System.out.println("transiter = " + e.get(i).getNomEtat());
 		}
 	}
 	
 	//methode qui implemente le calcul des lambda fermeture
-	public ArrayList<Etat> calculLambdaFermeture(ArrayList<Etat> T){ //etats resultant de transiter
+	public ArrayList<Etat> calculLambdaFermeture(ArrayList<Etat> T) { //etats resultant de transiter
+		
 		ArrayList<Etat> F=new ArrayList<Etat>();
 		ArrayList<Etat> p=new ArrayList<Etat>();
 		Etat e = new Etat(null);
 
-		for(Etat etat : T){ 
-			if(p.isEmpty()){
+		for (Etat etat : T) {
+			
+			if (p.isEmpty()) {
 				p.add(etat);
-			}else{
-				if(!p.contains(etat))
+			} else {
+				if (!p.contains(etat))
 					p.add(etat);
 			}
 		}
+		
 		int i=0;
-		while(!p.isEmpty()){
-			if(!F.contains(p.get(i)))
+		
+		while (!p.isEmpty()) {
+			
+			if (!F.contains(p.get(i)))
 				F.add(p.get(i));
-			for(Transition t: this.getTransitions()){
-				if(t.getEtatInit() == p.get(i).getNomEtat() && t.getEntree()=='#'){
-					if(!p.contains(t.getSortie()))
+			
+			for (Transition t: this.getTransitions()) {
+				
+				if (t.getEtatInit() == p.get(i).getNomEtat() && t.getEntree()=='#') {
+					
+					if (!p.contains(t.getSortie()))
 						e.setNomEtat(t.getSortie());
 						p.add(e);
 				}
 			}
+			
 			p.remove(i);
 		}
+		
 		return F;
 	}
 	
-	public void afficheLambdaFermeture(ArrayList<Etat> e){
+	public void afficheLambdaFermeture(ArrayList<Etat> e) {
+		
 		for (int i = 0; i < e.size(); i++) {
+			
 			System.out.println(e.get(i).getNomEtat());
 		}
 	}
+	
+	public void determinisation() {
+		
+		ArrayList<Etat> superEtats = new ArrayList<Etat>();
+		
+		for (int i = 0; i < this.getEtats().size(); i++) {
+			
+			for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
+				
+				superEtats = this.transiter(this.getEtats().get(i), this.getAlphabetEntree().get(j));
+			}
+		}
+		
+		// Non fini...
+	}
+	
 	
 	/**
 	 * 
