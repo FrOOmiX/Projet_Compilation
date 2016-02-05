@@ -290,7 +290,8 @@ public class Moteur {
 		}
 	}
 	
-	public void afficheTransitions(){
+	public void afficheTransitions() {
+		
 		try{
 			String str ="";
 			str += this.getTransitions().get(0).getEtatInit();
@@ -463,6 +464,13 @@ public class Moteur {
 			}
 		}
 	}*/
+	
+	
+	/**
+	 * 
+	 * Partie determinisation
+	 *
+	 */
 	public ArrayList<Etat> transiter(Etat etat, Character c){
 		ArrayList<Etat> e = new ArrayList<Etat>();
 		for (int i = 0; i < this.getTransitions().size(); i++) {

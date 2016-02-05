@@ -76,9 +76,7 @@ public class TestMoteur {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return fichierOk;
 		
-	
+		return fichierOk;
 	}
-	
 }
