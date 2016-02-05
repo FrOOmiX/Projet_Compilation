@@ -311,7 +311,7 @@ public class Moteur {
 	public void traitementEntrees(String entrees) {
 		
 		int i = 0, j = 0, cptDiese = 0;
-		String cEntree, etatCourant = String.valueOf(this.getEtatInit().get(0));
+		String cEntree, etatCourant = this.getEtatInit().get(0);
 		String phraseSortie = "";
 		
 		System.out.println("\nTraitement des phrases lues :");
@@ -340,7 +340,7 @@ public class Moteur {
 					while (j < this.getTransitions().size()) {
 						
 						// Si l'on trouve une transition dont l'entree et l'etat courant correspondent
-						if ((this.getTransitions().get(j).getEntree() == String.valueOf(cEntree)) && (this.getTransitions().get(j).getEtatInit() == String.valueOf(etatCourant))) {
+						if ((this.getTransitions().get(j).getEntree().equals(cEntree)) && (this.getTransitions().get(j).getEtatInit().equals(etatCourant))) {
 							
 							etatCourant = this.getTransitions().get(j).getEtatFinal();
 							System.out.print("Etat Courant : " +this.getTransitions().get(j).getEtatInit()+ ", ");
@@ -391,7 +391,7 @@ public class Moteur {
 					}
 					
 					phraseSortie = "";
-					etatCourant = String.valueOf(this.getEtatInit().get(0));
+					etatCourant = this.getEtatInit().get(0);
 					
 				// Si l'on arrive a la fin des phrases
 				} else if (cEntree == "#") {

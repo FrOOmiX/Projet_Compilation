@@ -10,9 +10,9 @@ public class TestMoteur {
 		
 		Moteur moteur = null;
 		
-		if(verificationFichier("ND03.descr")) {
+		if(verificationFichier("S2.descr")) {
 			
-			moteur = new Moteur("ND03.descr");
+			moteur = new Moteur("S2.descr");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
@@ -27,7 +27,7 @@ public class TestMoteur {
 		
 		
 		// Traitement des entrees
-		//moteur.traitementEntrees("abab###");
+		moteur.traitementEntrees("papa maman###");
 		
 		//test de la fonction transiter sur un fichier testTransiter.descr
 		//System.out.println("\nTest de la fonction transiter :");
