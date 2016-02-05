@@ -38,7 +38,7 @@ public class Moteur {
 					commentaire="";
 					while (i < ligne.length()) {
 								
-						if (ligne.charAt(i) != '\'' && i>2 ) {
+						if (ligne.charAt(i) != '\'' && ligne.charAt(i) != '\"'  && i>2 ) {
 							commentaire+=(ligne.charAt(i));
 						}
 						i++;
