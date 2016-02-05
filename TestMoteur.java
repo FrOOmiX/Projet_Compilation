@@ -37,31 +37,37 @@ public class TestMoteur {
 		moteur.exportationDot();
 	}
 	
-	public static boolean verificationFichier(String nomFichier) throws IOException{
+	public static boolean verificationFichier(String nomFichier) throws IOException {
+
 		boolean fichierOk=false;
+
 		try {
+
 			String ligne;
 			BufferedReader str;
 			str = new BufferedReader(new FileReader(nomFichier));
 			ligne = str.readLine();
-			String meta="¬µ";
+			String meta="#";
 			boolean erreur =false;
+			
 			while(ligne != null && erreur==false){
-				if(Pattern.matches("C[\\s]\'[[\\p{Alnum}]*[\\s][\\p{Punct}]*[\\s]]*\'", ligne) 
-				|| Pattern.matches("M[\\s]"+meta, ligne) || Pattern.matches("V[\\s]\"[\\p{Lower}\\p{Digit}]*\"", ligne) 
+				if(Pattern.matches("C[\\s]\'.*\'", ligne) 
+				|| Pattern.matches("C[\\s]\".*\"", ligne) 
+				|| Pattern.matches("M[\\s]"+meta, ligne) 
+				|| Pattern.matches("V[\\s]\"[\\p{Lower}\\p{Digit}]*\"", ligne) 
 				|| Pattern.matches("O[\\s]\"[\\p{Alpha}\\p{Digit}]*\"", ligne) 
-				|| Pattern.matches("E[\\s][\\p{Digit}]", ligne) 
+				|| Pattern.matches("E[\\s][\\p{Digit}]*", ligne) 
 				|| Pattern.matches("I[[\\s][\\p{Digit}\\p{Alpha}]]*", ligne) 
 				|| Pattern.matches("F[[\\s][\\p{Digit}]]*", ligne) 
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'[\\p{Digit}\\p{Lower}]\'[\\s][\\p{Digit}\\p{Lower}][\\s]\'[\\p{Alpha}\\p{Digit}]\'", ligne)
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'[\\p{Digit}\\p{Lower}]\'[\\s][\\p{Digit}\\p{Lower}][\\s]\'#\'", ligne) 
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'[\\p{Digit}\\p{Lower}]\'[\\s][\\p{Digit}\\p{Lower}]", ligne)
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'"+meta+"\'[\\s][\\p{Digit}\\p{Lower}][\\s]\'[\\p{Alpha}\\p{Digit}]\'", ligne)
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'"+meta+"\'[\\s][\\p{Digit}\\p{Lower}][\\s]\'#\'", ligne) 
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'"+meta+"\'[\\s][\\p{Digit}\\p{Lower}]", ligne)
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}][\\s]\'[\\p{Alpha}\\p{Digit}]\'", ligne)
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}][\\s]\'#\'", ligne) 
-				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}][\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]", ligne)
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'[\\p{Digit}\\p{Lower}]*\'[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'[\\p{Alpha}\\p{Digit}]*\'", ligne)
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'[\\p{Digit}\\p{Lower}]*\'[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'", ligne) 
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'[\\p{Digit}\\p{Lower}]*\'[\\s][\\p{Digit}\\p{Lower}]*", ligne)
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'"+meta+"\'[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'[\\p{Alpha}\\p{Digit}]*\'", ligne)
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'"+meta+"\'[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'", ligne) 
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'"+meta+"\'[\\s][\\p{Digit}\\p{Lower}]*", ligne)
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'[\\p{Alpha}\\p{Digit}]*\'", ligne)
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'", ligne) 
+				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]*", ligne)
 				){
 					fichierOk=true;
 				}
@@ -70,8 +76,8 @@ public class TestMoteur {
 					erreur=true;
 					fichierOk=false;
 				}
-				ligne = str.readLine();
 				
+				ligne = str.readLine();
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
