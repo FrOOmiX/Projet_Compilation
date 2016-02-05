@@ -125,40 +125,17 @@ public class Moteur {
 				}// If F
 				
 				else if (ligne.charAt(0) == 'T' && i < ligne.length()) {
-								//sans lamba transition
-								if(ligne.length() == 9){
-									Transition tr = new Transition(ligne.charAt(2),ligne.charAt(5),ligne.charAt(8));
+								String s [] = ligne.split("\\s");
+								if(s.length == 4){
+									Transition tr = new Transition(s[1],s[2],s[3]);
 									transitions.add(tr);
-									//Etat etat= new Etat(String.valueOf(ligne.charAt(5)));
-									//etats.add(etat);
-									i = 0;
-									ligne = str.readLine();
 								}
-								else if(ligne.length() ==13){
-									Transition tr = new Transition(ligne.charAt(2),ligne.charAt(5),ligne.charAt(8),ligne.charAt(11));
+								else{
+									Transition tr = new Transition(s[1],s[2],s[3],s[4]);
 									transitions.add(tr);
-									//Etat etat= new Etat(String.valueOf(ligne.charAt(5)));
-									//etats.add(etat);
-									i = 0;
-									ligne = str.readLine();
 								}
-								//avec lambda transition
-								else if(ligne.length() ==10){
-									Transition tr = new Transition(ligne.charAt(2),ligne.charAt(6),ligne.charAt(9));
-									transitions.add(tr);
-									//Etat etat= new Etat(String.valueOf(ligne.charAt(5)));
-									//etats.add(etat);
-									i = 0;
-									ligne = str.readLine();
-								}
-								else if(ligne.length() ==14){
-									Transition tr = new Transition(ligne.charAt(2),ligne.charAt(6),ligne.charAt(9),ligne.charAt(12));
-									transitions.add(tr);
-									//Etat etat= new Etat(String.valueOf(ligne.charAt(5)));
-									//etats.add(etat);
-									i = 0;
-									ligne = str.readLine();
-								}
+								ligne = str.readLine();
+								
 					
 				}// If T
 
@@ -191,7 +168,7 @@ public class Moteur {
 	
 	public void afficheMetaChar(){
 		
-			if(this.getMeta() !='#'){
+			if(this.getMeta() =='#'){
 				
 				System.out.println("Meta caractere : " + this.getMeta());
 				
@@ -300,16 +277,16 @@ public class Moteur {
 		
 		try{
 			String str ="";
-			str += this.getTransitions().get(0).getEtatInit();
-			str += this.getTransitions().get(0).getEntree();
-			str += this.getTransitions().get(0).getEtatFinal();
-			str += this.getTransitions().get(0).getSortie();
+			str += this.getTransitions().get(0).getEtatInit()+" ";
+			str += this.getTransitions().get(0).getEntree()+" ";
+			str += this.getTransitions().get(0).getEtatFinal()+" ";
+			str += this.getTransitions().get(0).getSortie()+" ";
 			for (int i = 1; i < this.getTransitions().size(); i++) {
 				str += "\n";
-				str += this.getTransitions().get(i).getEtatInit();
-				str += this.getTransitions().get(i).getEntree();
-				str += this.getTransitions().get(i).getEtatFinal();
-				str += this.getTransitions().get(i).getSortie();
+				str += this.getTransitions().get(i).getEtatInit()+" ";
+				str += this.getTransitions().get(i).getEntree()+" ";
+				str += this.getTransitions().get(i).getEtatFinal()+" ";
+				str += this.getTransitions().get(i).getSortie()+" ";
 			}
 			System.out.println("Transition(s) : \n" + str);
 		}catch(IndexOutOfBoundsException e){
@@ -337,7 +314,7 @@ public class Moteur {
 	public void traitementEntrees(String entrees) {
 		
 		int i = 0, j = 0, cptDiese = 0;
-		char cEntree, etatCourant = this.getEtatInit().get(0);
+		String cEntree, etatCourant = String.valueOf(this.getEtatInit().get(0));
 		String phraseSortie = "";
 		
 		System.out.println("\nTraitement des phrases lues :");
@@ -345,9 +322,9 @@ public class Moteur {
 		while ((i < entrees.length()) && (cptDiese < 1)) {
 			
 			// On recupere la prochaine entree
-			cEntree = entrees.charAt(i);
+			cEntree = String.valueOf(entrees.charAt(i));
 			
-			if (cEntree == '#' && i == 0) {
+			if (cEntree == "#" && i == 0) {
 				
 				System.out.println("Aucune phrase n'a ete entree");
 				cptDiese++;
@@ -366,14 +343,14 @@ public class Moteur {
 					while (j < this.getTransitions().size()) {
 						
 						// Si l'on trouve une transition dont l'entree et l'etat courant correspondent
-						if ((this.getTransitions().get(j).getEntree() == cEntree) && (this.getTransitions().get(j).getEtatInit() == etatCourant)) {
+						if ((this.getTransitions().get(j).getEntree() == String.valueOf(cEntree)) && (this.getTransitions().get(j).getEtatInit() == String.valueOf(etatCourant))) {
 							
 							etatCourant = this.getTransitions().get(j).getEtatFinal();
 							System.out.print("Etat Courant : " +this.getTransitions().get(j).getEtatInit()+ ", ");
 							System.out.print("Entree : " +cEntree);
 							
 							// S'il existe une sortie
-							if ((this.getTransitions().get(j).getSortie() != '#')) {
+							if ((this.getTransitions().get(j).getSortie() != "#")) {
 								
 								System.out.print(", Sortie : " +this.getTransitions().get(j).getSortie());
 								phraseSortie += this.getTransitions().get(j).getSortie();
@@ -392,10 +369,10 @@ public class Moteur {
 					}
 					
 				// Si l'on arrive a une fin de phrase
-				} else if ((cEntree == ' ') || (cEntree == '\n')) {
+				} else if ((cEntree == " ") || (cEntree == "\n")) {
 					
 					// S'il s'agit du premier caractere
-					if (cEntree == entrees.charAt(0)) {
+					if (cEntree == String.valueOf(entrees.charAt(0))) {
 						
 						System.out.println("Aucune phrase n'a ete entree");
 						System.out.println("-- Fin de phrase --");
@@ -417,10 +394,10 @@ public class Moteur {
 					}
 					
 					phraseSortie = "";
-					etatCourant = this.getEtatInit().get(0);
+					etatCourant = String.valueOf(this.getEtatInit().get(0));
 					
 				// Si l'on arrive a la fin des phrases
-				} else if (cEntree == '#') {
+				} else if (cEntree == "#") {
 					
 					// Si l'etat courant fait partie des etats acceptants
 					if (this.getEtatsAcceptants().contains(etatCourant)) {
@@ -442,7 +419,7 @@ public class Moteur {
 				// Si l'entree est un autre caractere
 				} else {
 					
-					if (cEntree == entrees.charAt(0)) {
+					if (cEntree == String.valueOf(entrees.charAt(0))) {
 						
 						System.out.println("Le caractere ne fait pas partie des entrees acceptables");
 						System.out.println("-- Fin de phrase --");
@@ -537,7 +514,7 @@ public class Moteur {
 			
 			for (Transition t: this.getTransitions()) {
 				
-				if (t.getEtatInit() == p.get(i).getNomEtat() && t.getEntree()=='#') {
+				if (t.getEtatInit() == p.get(i).getNomEtat() && t.getEntree()=="#") {
 					
 					if (!p.contains(t.getSortie()))
 						e.setNomEtat(t.getSortie());
@@ -581,51 +558,40 @@ public class Moteur {
 	 * 
 	 * 
 	 */
-	public void exportationDot() {
+	public void exportationDot() throws IOException {
 		
 		File f = new File("Exportation.dot");
+		FileWriter fw = new FileWriter(f);
 		
-		try {
+		// Squelette du fichier .dot
+		String squelette = "digraph G {\n\n";
+		
+		// Ecriture du squelette
+		fw.write(squelette);
+		
+		// Ecriture etat initial et labels
+		fw.write("\t\"\" -> " +this.getEtatInit().get(0));
+		fw.write("\n\t" +this.getEtatInit().get(0)+ " -> " +this.getTransitions().get(0).getEtatFinal());
+		fw.write(" [label=\"" +this.getTransitions().get(0).getEntree()+ "/" +this.getTransitions().get(0).getSortie()+ "\"]");
+		
+		// Ecriture autres etats et labels
+		for (int i = 1; i < this.getTransitions().size(); i++) {
 			
-			FileWriter fw = new FileWriter(f);
-			
-			// Squelette du fichier .dot
-			String squelette = "digraph G {\n\n";
-			
-			// Ecriture du squelette
-			fw.write(squelette);
-			
-			// Ecriture etat initial et labels
-			for (int i = 0; i < this.getEtatInit().size(); i++) {
-				
-				fw.write("\n\t\"\" -> " +this.getEtatInit().get(i));
-				fw.write("\n\t" +this.getEtatInit().get(i)+ " -> " +this.getTransitions().get(i).getEtatFinal());
-				fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
-			}
-			
-			// Ecriture autres etats et labels
-			for (int i = 1; i < this.getTransitions().size(); i++) {
-				
-				fw.write("\n\t" +this.getTransitions().get(i).getEtatInit()+ " -> " +this.getTransitions().get(i).getEtatFinal());
-				fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
-			}
-			
-			// Marquage etat initial
-			fw.write("\n\t\"\" [shape=none]");
-			
-			// Marquage etats acceptants
-			for (int i = 0; i < this.getEtatsAcceptants().size(); i++) {
-				
-				fw.write("\n\t" +this.getEtatsAcceptants().get(i)+ " [shape=doublecircle]");
-			}
-			
-			// Fermeture fichier
-			fw.write("\n}");
-			fw.close();
-			
-		} catch (IOException e) {
-			
-			System.out.println("Erreur d'ecriture !");
+			fw.write("\n\t" +this.getTransitions().get(i).getEtatInit()+ " -> " +this.getTransitions().get(i).getEtatFinal());
+			fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
 		}
+		
+		// Marquage etat initial
+		fw.write("\n\t\"\" [shape=none]");
+		
+		// Marquage etats acceptants
+		for (int i = 0; i < this.getEtatsAcceptants().size(); i++) {
+			
+			fw.write("\n\t" +this.getEtatsAcceptants().get(i)+ " [shape=doublecircle]");
+		}
+		
+		// Fermeture fichier
+		fw.write("\n}");
+		fw.close();
 	}
 }
