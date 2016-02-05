@@ -1,11 +1,11 @@
 public class Transition {
 	
-	private Character etatInit;
-	private Character etatFinal;
-	private Character entree;
-	private Character sortie;
+	private String etatInit;
+	private String etatFinal;
+	private String entree;
+	private String sortie;
 	
-	public Transition(Character init, Character entree, Character fin, Character sortie) {
+	public Transition(String init, String entree, String fin, String sortie) {
 		
 		this.etatInit = init;
 		this.entree = entree;
@@ -13,43 +13,43 @@ public class Transition {
 		this.sortie  = sortie;
 	}
 
-	public Transition(Character init, Character entree, Character fin) {
+	public Transition(String init, String entree, String fin) {
 		
 		this.etatInit = init;
 		this.entree = entree;
 		this.etatFinal = fin;
-		this.sortie = '#';
+		this.sortie = "#";
 	}
 	
-	public Character getEtatInit() {
+	public String getEtatInit() {
 		return this.etatInit;
 	}
 
-	public void setEtatInit(Character etatInit) {
+	public void setEtatInit(String etatInit) {
 		this.etatInit = etatInit;
 	}
 
-	public Character getEtatFinal() {
+	public String getEtatFinal() {
 		return this.etatFinal;
 	}
 
-	public void setEtatFinal(Character etatFinal) {
+	public void setEtatFinal(String etatFinal) {
 		this.etatFinal = etatFinal;
 	}
 
-	public Character getEntree() {
+	public String getEntree() {
 		return this.entree;
 	}
 
-	public void setEntree(Character entree) {
+	public void setEntree(String entree) {
 		this.entree = entree;
 	}
 
-	public Character getSortie() {
+	public String getSortie() {
 		return this.sortie;
 	}
 
-	public void setSortie(Character sortie) {
+	public void setSortie(String sortie) {
 		this.sortie = sortie;
 	}
 }
