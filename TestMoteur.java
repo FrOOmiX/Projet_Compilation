@@ -18,6 +18,7 @@ public class TestMoteur {
 			moteur.afficheAlphabetEntree();
 			moteur.afficheEtatInit();
 			moteur.afficheNombreEtat();
+			moteur.definirEtats();
 			moteur.afficherEtats();
 			moteur.afficheEtatsAcceptants();
 			moteur.afficheAlphabetSortie();
