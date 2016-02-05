@@ -237,36 +237,35 @@ public class Moteur {
 		}
 	}
 	
-	public void afficherEtats() {
+	public void definirEtats() {
 		
 		this.etats = new ArrayList<Etat>();
 		
 		if (this.getNbEtats() != 0) {
-			
 			int i = this.getNbEtats() - '0' - 1;
-			String str = "";
-			
 			while (i >= 0) {
 				
 				if (i != this.getNbEtats() - '0' - 1) {
 					
 					Etat e = new Etat((char) (i + '0'));
 					this.getEtats().add(e);
-					str += ", " + i ;
+					
 				} else {
 					
 					Etat e = new Etat((char) (i + '0'));
 					this.getEtats().add(e);
-					str += i;
 				}
-				
 				i--;
 			}
-			System.out.println("Les differents etats sont les suivants : " + str + ".");
-		} else {
-			
-			System.out.println("Il n'y a pas d'etats a enumerer.");
+		}	
+	}
+	
+	public void afficherEtats(){
+		String str = "Les etats sont : ";
+		for (int i = 0; i < this.getEtats().size(); i++) {
+			str += this.getEtats().get(i).getNomEtat();
 		}
+		System.out.println(str);
 	}
 	
 	public void afficheEtatInit() {
