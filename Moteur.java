@@ -1,22 +1,19 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 
 public class Moteur {
 
 	private char meta; 										// meta caractere pour arreter la saisie
 	private String commentaire;								// commentaires
-	private ArrayList<Character> alphabetEntree; 			// liste du vocabulaire d'entree
-	private ArrayList<Character> sorties; 					// liste du vocabulaire de sortie
+	private ArrayList<String> alphabetEntree; 			// liste du vocabulaire d'entree
+	private ArrayList<String> sorties; 					// liste du vocabulaire de sortie
 	private char nbEtats; 									// nombre d'etats dans l'AEF
-	private ArrayList<Character> etatInit; 					// liste des etats init de l'AEF
-	private ArrayList<Character> etatsAcceptants; 			// liste des etats acceptant
+	private ArrayList<String> etatInit; 					// liste des etats init de l'AEF
+	private ArrayList<String> etatsAcceptants; 			// liste des etats acceptant
 	private ArrayList<Transition> transitions; 				// liste des transitions
 	private ArrayList<Etat> etats;
 	
@@ -30,8 +27,8 @@ public class Moteur {
 			ligne = str.readLine();
 			
 			// Gestion de l'etat initial par defaut
-			this.etatInit = new ArrayList<Character>();
-			etatInit.add('0');
+			this.etatInit = new ArrayList<String>();
+			etatInit.add("0");
 			meta ='#';
 			int i = 0;
 
@@ -59,14 +56,14 @@ public class Moteur {
 				}// If M
 				
 				else if (ligne.charAt(0) == 'V' && i < ligne.length()) {
-					this.alphabetEntree = new ArrayList<Character>();
+					this.alphabetEntree = new ArrayList<String>();
 
 					while (i < ligne.length()) {
 
 						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'
 								&& i > 0) {
 
-							alphabetEntree.add(ligne.charAt(i));
+							alphabetEntree.add(String.valueOf(ligne.charAt(i)));
 
 						}
 						i++;
@@ -74,14 +71,14 @@ public class Moteur {
 				}// If V
 
 				else if (ligne.charAt(0) == 'O' && i < ligne.length()) {
-					this.sorties = new ArrayList<Character>();
+					this.sorties = new ArrayList<String>();
 
 					while (i < ligne.length()) {
 
 						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'
 								&& i > 0) {
 
-							sorties.add(ligne.charAt(i));
+							sorties.add(String.valueOf(ligne.charAt(i)));
 
 						}
 						i++;
@@ -98,13 +95,13 @@ public class Moteur {
 				}// If E
 
 				else if (ligne.charAt(0) == 'I' && i < ligne.length()) {
-					this.etatInit = new ArrayList<Character>();
+					this.etatInit = new ArrayList<String>();
 					while (i < ligne.length()) {
 
 						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'
 								&& i > 0) {
 
-							etatInit.add(ligne.charAt(i));
+							etatInit.add(String.valueOf(ligne.charAt(i)));
 
 						}
 						i++;
@@ -112,12 +109,12 @@ public class Moteur {
 				}// If I
 
 				else if (ligne.charAt(0) == 'F' && i < ligne.length()) {
-					this.etatsAcceptants = new ArrayList<Character>();
+					this.etatsAcceptants = new ArrayList<String>();
 					while (i < ligne.length()) {
 
 						if (ligne.charAt(i) != ' ' && i > 0) {
 
-							etatsAcceptants.add(ligne.charAt(i));
+							etatsAcceptants.add(String.valueOf(ligne.charAt(i)));
 
 						}
 						i++;
@@ -127,7 +124,7 @@ public class Moteur {
 				else if (ligne.charAt(0) == 'T' && i < ligne.length()) {
 								String s [] = ligne.split("\\s");
 								if(s.length == 4){
-								Transition tr = new Transition(s[1],s[2].substring(1, 2),s[3]);
+									Transition tr = new Transition(s[1],s[2].substring(1, 2),s[3]);
 									transitions.add(tr);
 								}
 								else{
@@ -296,13 +293,13 @@ public class Moteur {
 
 	// Ensemble des getters sur les variables d'instance du moteur AEF
 	public String getCommentaire() { return this.commentaire; }
-	public ArrayList<Character> getAlphabetEntree() { return this.alphabetEntree; }
+	public ArrayList<String> getAlphabetEntree() { return this.alphabetEntree; }
 	public char getMeta() {	return this.meta; }
-	public ArrayList<Character> getSorties() { return this.sorties; }
+	public ArrayList<String> getSorties() { return this.sorties; }
 	public char getNbEtats() { return this.nbEtats; }
 	public ArrayList<Etat> getEtats() { return this.etats; }
-	public ArrayList<Character> getEtatInit() {	return this.etatInit; }
-	public ArrayList<Character> getEtatsAcceptants() { return this.etatsAcceptants; }
+	public ArrayList<String> getEtatInit() {	return this.etatInit; }
+	public ArrayList<String> getEtatsAcceptants() { return this.etatsAcceptants; }
 	public ArrayList<Transition> getTransitions() { return this.transitions; }
 	
 	
@@ -454,13 +451,13 @@ public class Moteur {
 	 * Partie determinisation
 	 *
 	 */
-	public ArrayList<Etat> transiter(Etat etat, Character c) {
+	public ArrayList<Etat> transiter(Etat etat, String string) {
 		
 		ArrayList<Etat> e = new ArrayList<Etat>();
 		
 		for (int i = 0; i < this.getTransitions().size(); i++) {
 			
-			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(c)) {
+			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(string)) {
 				
 				Etat state = new Etat(this.getTransitions().get(i).getEtatFinal());
 				e.add(state);
