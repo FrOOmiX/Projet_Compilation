@@ -25,6 +25,7 @@ public class SuperEtat { //plus tard tester avec extends Etat pour renommer le s
 			str += ", ";
 			str += this.getSuperEtats().get(i).getNomEtat();
 		}
+		str += "}.";
 		return str;
 	}
 	
