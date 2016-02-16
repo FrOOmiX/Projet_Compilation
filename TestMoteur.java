@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class TestMoteur {
@@ -10,27 +11,29 @@ public class TestMoteur {
 		
 		Moteur moteur = null;
 		
-		if (verificationFichier("S4.descr")) {
+		if (verificationFichier("NDSL01.descr")) {
 			
-			moteur = new Moteur("S4.descr");
+			moteur = new Moteur("NDSL01.descr");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
 			moteur.afficheEtatInit();
 			moteur.afficheNombreEtat();
-			moteur.definirEtats();
+			moteur.setEtats();
 			moteur.afficherEtats();
 			moteur.afficheEtatsAcceptants();
 			moteur.afficheAlphabetSortie();
 			moteur.afficheTransitions();
 		}
 		
-		// Traitement des entrees
-		moteur.traitementEntrees("abcabc###");
+		// Affichage de transiter
+		System.out.println("\nTransiter : ");
+		Etat e = new Etat("0");
+		SuperEtat superEtat = moteur.transiterUnEtat(e, "a");
+		System.out.println(superEtat.toString());
 		
-		//test de la fonction transiter sur un fichier testTransiter.descr
-		//System.out.println("\nTest de la fonction transiter :");
-		//moteur.afficheTransiter();
+		// Traitement des entrees
+		moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
 		
 		// Exportation en .dot
 		moteur.exportationDot();

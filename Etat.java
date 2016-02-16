@@ -8,10 +8,6 @@ public class Etat {
 		this.nomEtat = nom;
 	}
 
-	public Etat(char nom) {
-		this.nom = nom;
-	}
-
 	public String getNomEtat() { return this.nomEtat; }
 
 	public void setNomEtat(String nomEtat) { this.nomEtat = nomEtat; }

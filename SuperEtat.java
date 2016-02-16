@@ -1,32 +1,36 @@
 import java.util.ArrayList;
 
-public class SuperEtat { //plus tard tester avec extends Etat pour renommer le super Etat (ex : on a super : {0,2,9}
-						//et on renomme en super : 0
+public class SuperEtat {
+	
 	private ArrayList<Etat> superEtats;
 	
+	// Constructeur
 	public SuperEtat(){
+		
 		this.superEtats = new ArrayList<Etat>();
 	}
 
-	//assesseurs
-	public ArrayList<Etat> getSuperEtats() {
-		return superEtats;
-	}
-
-	public void setSuperEtats(ArrayList<Etat> superEtats) {
-		this.superEtats = superEtats;
+	// Getters/Setters
+	public ArrayList<Etat> getSuperEtats() { return this.superEtats; }
+	public void setSuperEtats(ArrayList<Etat> superEtats) { this.superEtats = superEtats; }
+	
+	// Methode d'ajout d'etats
+	public void addEtat(Etat e) {
+		
+		this.superEtats.add(e);
 	}
 	
 	//redefinition toString pour l'affichage
-	public String toString(){
-		String str = "Super etats : {";
-		str += this.getSuperEtats().get(0).getNomEtat();
+	public String toString() {
+		
+		String str = "Super etats : { ";
+		
 		for (int i = 0; i < this.getSuperEtats().size(); i++) {
-			str += ", ";
-			str += this.getSuperEtats().get(i).getNomEtat();
+			
+			str += this.getSuperEtats().get(i).getNomEtat()+ " ";
 		}
-		str += "}.";
+		
+		str += "}";
 		return str;
 	}
-	
 }

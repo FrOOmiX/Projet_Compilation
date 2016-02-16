@@ -11,7 +11,7 @@ public class Moteur {
 	private String commentaire;								// commentaires
 	private ArrayList<String> alphabetEntree; 			// liste du vocabulaire d'entree
 	private ArrayList<String> sorties; 					// liste du vocabulaire de sortie
-	private char nbEtats; 									// nombre d'etats dans l'AEF
+	private int nbEtats; 									// nombre d'etats dans l'AEF
 	private ArrayList<String> etatInit; 					// liste des etats init de l'AEF
 	private ArrayList<String> etatsAcceptants; 			// liste des etats acceptant
 	private ArrayList<Transition> transitions; 				// liste des transitions
@@ -88,9 +88,10 @@ public class Moteur {
 				else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
 
 					if (ligne.charAt(i) != ' ' && i > 0) {
-						nbEtats = (ligne.charAt(i));
-
+						
+						nbEtats = Character.getNumericValue((ligne.charAt(i)));
 					}
+					
 					i++;
 				}// If E
 
@@ -207,42 +208,26 @@ public class Moteur {
 		}
 	}
 
-	public void afficheNombreEtat() { 
+	public void afficheNombreEtat() {
+		
 		if (this.getNbEtats() != 0 ) {
+			
 			System.out.println("Il y a : " + this.getNbEtats() + " etats."); 
-		}else{
+		} else {
+			
 			System.out.println("Il n'y a pas d'etats.");
 		}
 	}
 	
-	public void definirEtats() {
+	public void afficherEtats() {
 		
-		this.etats = new ArrayList<Etat>();
-		
-		if (this.getNbEtats() != 0) {
-			int i = this.getNbEtats() - '0' - 1;
-			while (i >= 0) {
-				
-				if (i != this.getNbEtats() - '0' - 1) {
-					
-					Etat e = new Etat((char) (i + '0'));
-					this.getEtats().add(e);
-					
-				} else {
-					
-					Etat e = new Etat((char) (i + '0'));
-					this.getEtats().add(e);
-				}
-				i--;
-			}
-		}	
-	}
-	
-	public void afficherEtats(){
 		String str = "Les etats sont : ";
+		
 		for (int i = 0; i < this.getEtats().size(); i++) {
-			str += this.getEtats().get(i).getNomEtat();
+			
+			str += this.getEtats().get(i).getNomEtat()+ " ";
 		}
+		
 		System.out.println(str);
 	}
 	
@@ -297,18 +282,30 @@ public class Moteur {
 
 	/**
 	 * 
-	 * Getters
+	 * Getters/Setters
 	 *
 	 */
 	public String getCommentaire() { return this.commentaire; }
 	public ArrayList<String> getAlphabetEntree() { return this.alphabetEntree; }
 	public char getMeta() {	return this.meta; }
 	public ArrayList<String> getSorties() { return this.sorties; }
-	public char getNbEtats() { return this.nbEtats; }
+	public int getNbEtats() { return this.nbEtats; }
 	public ArrayList<Etat> getEtats() { return this.etats; }
 	public ArrayList<String> getEtatInit() {	return this.etatInit; }
 	public ArrayList<String> getEtatsAcceptants() { return this.etatsAcceptants; }
 	public ArrayList<Transition> getTransitions() { return this.transitions; }
+	public void setEtats() {
+		
+		this.etats = new ArrayList<Etat>();
+		
+		for (int i = 0; i < this.getNbEtats(); i++) {
+			
+			Etat e = new Etat(String.valueOf(i));
+			etats.add(e);
+		}
+	}
+	
+	
 	
 	
 	/**
@@ -322,7 +319,7 @@ public class Moteur {
 		String cEntree, etatCourant = this.getEtatInit().get(0);
 		String phraseSortie = "";
 		
-		System.out.println("\nTraitement des phrases lues :");
+		System.out.println("\n\nTraitement des phrases lues :");
 		
 		while ((i < entrees.length()) && (cptDiese < 1)) {
 			
@@ -453,9 +450,40 @@ public class Moteur {
 	 *
 	 */
 	
+	// Calcul un super etat pour un etat initial avec une entree
+	public SuperEtat transiterUnEtat(Etat etat, String string) {
+		
+		SuperEtat s = new SuperEtat();
+		
+		for (int i = 0; i < this.getTransitions().size(); i++) {
+			
+			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(string)) {
+				
+				Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
+				s.addEtat(e);
+			}
+		}
+		
+		return s;
+	}
 	
-	
-	
+	// Calcul tous les super etat de l'automate
+	public ArrayList<SuperEtat> transiterTousEtats(ArrayList<Etat> e, ArrayList<String> entrees) {
+		
+		ArrayList<SuperEtat> superEtats = new ArrayList<SuperEtat>();
+		SuperEtat s;
+		
+		for (int i = 0; i < e.size(); i++) {
+			
+			for (int j = 0; j < entrees.size(); j++) {
+				
+				s = transiterUnEtat(e.get(i), entrees.get(i));
+				superEtats.add(s);
+			}
+		}
+		
+		return superEtats;
+	}
 	
 	
 	/**
