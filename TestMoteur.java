@@ -10,9 +10,9 @@ public class TestMoteur {
 		
 		Moteur moteur = null;
 		
-		if(verificationFichier("S2.descr")) {
+		if (verificationFichier("S4.descr")) {
 			
-			moteur = new Moteur("S2.descr");
+			moteur = new Moteur("S4.descr");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
@@ -25,9 +25,8 @@ public class TestMoteur {
 			moteur.afficheTransitions();
 		}
 		
-		
 		// Traitement des entrees
-		moteur.traitementEntrees("papa maman###");
+		moteur.traitementEntrees("abcabc###");
 		
 		//test de la fonction transiter sur un fichier testTransiter.descr
 		//System.out.println("\nTest de la fonction transiter :");
@@ -39,7 +38,7 @@ public class TestMoteur {
 	
 	public static boolean verificationFichier(String nomFichier) throws IOException {
 
-		boolean fichierOk=false;
+		boolean fichierOk = false;
 
 		try {
 
@@ -50,7 +49,8 @@ public class TestMoteur {
 			String meta="#";
 			boolean erreur =false;
 			
-			while(ligne != null && erreur==false){
+			while (ligne != null && erreur==false) {
+				
 				if(Pattern.matches("C[\\s]\'.*\'", ligne) 
 				|| Pattern.matches("C[\\s]\".*\"", ligne) 
 				|| Pattern.matches("M[\\s]"+meta, ligne) 
@@ -70,8 +70,8 @@ public class TestMoteur {
 				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]*", ligne)
 				){
 					fichierOk=true;
-				}
-				else{
+				} else {
+					
 					System.out.println("Erreur de syntaxe : "+ligne+"\nmerci de respecter le format .descr.");
 					erreur=true;
 					fichierOk=false;
@@ -79,8 +79,9 @@ public class TestMoteur {
 				
 				ligne = str.readLine();
 			}
+			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

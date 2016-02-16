@@ -152,7 +152,11 @@ public class Moteur {
 		}
 	}
 	
-	// Ensemble des methodes d'affichage des elements constituant l'AEF
+	/**
+	 * 
+	 * Methodes d'affichage
+	 * 
+	 */
 	public void afficherCommentaire(){
 		try{
 			if(!this.getCommentaire().isEmpty())
@@ -291,7 +295,11 @@ public class Moteur {
 		}
 	}
 
-	// Ensemble des getters sur les variables d'instance du moteur AEF
+	/**
+	 * 
+	 * Getters
+	 *
+	 */
 	public String getCommentaire() { return this.commentaire; }
 	public ArrayList<String> getAlphabetEntree() { return this.alphabetEntree; }
 	public char getMeta() {	return this.meta; }
@@ -305,7 +313,7 @@ public class Moteur {
 	
 	/**
 	 * 
-	 * Partie Traitement des entrees
+	 * Traitement des entrees
 	 * 
 	 */
 	public void traitementEntrees(String entrees) {
@@ -366,7 +374,7 @@ public class Moteur {
 					}
 					
 				// Si l'on arrive a une fin de phrase
-				} else if ((cEntree == " ") || (cEntree == "\n")) {
+				} else if ((cEntree.equals(" ")) || (cEntree.equals("\n"))) {
 					
 					// S'il s'agit du premier caractere
 					if (cEntree == String.valueOf(entrees.charAt(0))) {
@@ -394,7 +402,7 @@ public class Moteur {
 					etatCourant = this.getEtatInit().get(0);
 					
 				// Si l'on arrive a la fin des phrases
-				} else if (cEntree == "#") {
+				} else if (cEntree.equals("#")) {
 					
 					// Si l'etat courant fait partie des etats acceptants
 					if (this.getEtatsAcceptants().contains(etatCourant)) {
@@ -436,14 +444,7 @@ public class Moteur {
 		System.out.println("Fin de traitement");
 	}	
 	
-	//methode qui implemente la fonction transiter en vue de la determinisation
-	/*public void transiter(Character etat, Character c){
-		for (int i = 0; i < this.getTransitions().size(); i++) {
-			if(this.getTransitions().get(i).getEtatInit().equals(etat) && this.getTransitions().get(i).getEntree().equals(c)){
-				System.out.println("transiter(" + etat + ", " + c + ") = " + this.getTransitions().get(i).getEtatFinal());
-			}
-		}
-	}*/
+	
 	
 	
 	/**
@@ -451,102 +452,10 @@ public class Moteur {
 	 * Partie determinisation
 	 *
 	 */
-	public ArrayList<Etat> transiter(Etat etat, String string) {
-		
-		ArrayList<Etat> e = new ArrayList<Etat>();
-		
-		for (int i = 0; i < this.getTransitions().size(); i++) {
-			
-			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(string)) {
-				
-				Etat state = new Etat(this.getTransitions().get(i).getEtatFinal());
-				e.add(state);
-				//System.out.println("transiter(" + etat.getNomEtat() + ", " + c + ") = " + this.getTransitions().get(i).getEtatFinal());
-			}
-		}
-		
-		return e;
-	}
 	
-	/*public void afficheTransiter(){
-		for (int i = 0; i < this.getEtats().size(); i++) {
-			for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
-				Character etat = new Character(this.getEtats().get(i).getNomEtat());
-				Character lettre = new Character(this.getAlphabetEntree().get(j));
-				transiter(etat, lettre);
-			}
-		}
-	}*/
-	public void afficheTransiter(ArrayList<Etat> e) {
-		
-		for (int i = 0; i < e.size(); i++) {
-			
-			System.out.println("transiter = " + e.get(i).getNomEtat());
-		}
-	}
 	
-	//methode qui implemente le calcul des lambda fermeture
-	public ArrayList<Etat> calculLambdaFermeture(ArrayList<Etat> T) { //etats resultant de transiter
-		
-		ArrayList<Etat> F=new ArrayList<Etat>();
-		ArrayList<Etat> p=new ArrayList<Etat>();
-		Etat e = new Etat(null);
-
-		for (Etat etat : T) {
-			
-			if (p.isEmpty()) {
-				p.add(etat);
-			} else {
-				if (!p.contains(etat))
-					p.add(etat);
-			}
-		}
-		
-		int i=0;
-		
-		while (!p.isEmpty()) {
-			
-			if (!F.contains(p.get(i)))
-				F.add(p.get(i));
-			
-			for (Transition t: this.getTransitions()) {
-				
-				if (t.getEtatInit() == p.get(i).getNomEtat() && t.getEntree()=="#") {
-					
-					if (!p.contains(t.getSortie()))
-						e.setNomEtat(t.getSortie());
-						p.add(e);
-				}
-			}
-			
-			p.remove(i);
-		}
-		
-		return F;
-	}
 	
-	public void afficheLambdaFermeture(ArrayList<Etat> e) {
-		
-		for (int i = 0; i < e.size(); i++) {
-			
-			System.out.println(e.get(i).getNomEtat());
-		}
-	}
 	
-	public void determinisation() {
-		
-		ArrayList<Etat> superEtats = new ArrayList<Etat>();
-		
-		for (int i = 0; i < this.getEtats().size(); i++) {
-			
-			for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
-				
-				superEtats = this.transiter(this.getEtats().get(i), this.getAlphabetEntree().get(j));
-			}
-		}
-		
-		// Non fini...
-	}
 	
 	
 	/**
