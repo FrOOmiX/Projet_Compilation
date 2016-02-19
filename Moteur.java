@@ -89,6 +89,7 @@ public class Moteur {
 
 					if (ligne.charAt(i) != ' ' && i > 0) {
 						
+						// Pour l'instant on recupere un seul chiffre, il faudrait pouvoir recuperer le chiffre entier si >= 10
 						nbEtats = Character.getNumericValue((ligne.charAt(i)));
 					}
 					
@@ -447,8 +448,18 @@ public class Moteur {
 	/**
 	 * 
 	 * Partie determinisation
-	 *
+	 * 
+	 * 2 cas :
+	 * 		- AEFND sans #-transitions -> On utilise juste les fonctions transiter
+	 * 		- AEFND avec #-transitions -> Calcul des #-fermeture
 	 */
+	
+	public void determinisation(Moteur m) {
+		
+		
+	}
+	
+	
 	
 	// Calcul un super etat pour un etat initial avec une entree
 	public SuperEtat transiterUnEtat(Etat etat, String string) {
