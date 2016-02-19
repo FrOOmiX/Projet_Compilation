@@ -11,9 +11,9 @@ public class TestMoteur {
 		
 		Moteur moteur = null;
 		
-		if (verificationFichier("NDSL01.descr")) {
+		if (verificationFichier("NDtest.descr")) {
 			
-			moteur = new Moteur("NDSL01.descr");
+			moteur = new Moteur("NDtest.descr");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
@@ -26,17 +26,23 @@ public class TestMoteur {
 			moteur.afficheTransitions();
 		}
 		
+		/*
 		// Affichage de transiter
 		System.out.println("\nTransiter : ");
 		Etat e = new Etat("0");
 		SuperEtat superEtat = moteur.transiterUnEtat(e, "a");
 		System.out.println(superEtat.toString());
+		*/
+		
+		// Determinisation
+		System.out.println("\nDeterminisation : ");
+		moteur.determinisation();
 		
 		// Traitement des entrees
-		moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
+		//moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
 		
 		// Exportation en .dot
-		moteur.exportationDot();
+		//moteur.exportationDot();
 	}
 	
 	public static boolean verificationFichier(String nomFichier) throws IOException {

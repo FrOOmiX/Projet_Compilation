@@ -29,7 +29,7 @@ public class Moteur {
 			// Gestion de l'etat initial par defaut
 			this.etatInit = new ArrayList<String>();
 			etatInit.add("0");
-			meta ='#';
+			meta = '#';
 			int i = 0;
 
 			while (ligne != null) {
@@ -226,7 +226,7 @@ public class Moteur {
 		
 		for (int i = 0; i < this.getEtats().size(); i++) {
 			
-			str += this.getEtats().get(i).getNomEtat()+ " ";
+			str += this.getEtats().get(i).getNom()+ " ";
 		}
 		
 		System.out.println(str);
@@ -451,50 +451,97 @@ public class Moteur {
 	 * 
 	 * 2 cas :
 	 * 		- AEFND sans #-transitions -> On utilise juste les fonctions transiter
-	 * 		- AEFND avec #-transitions -> Calcul des #-fermeture
+	 * 		- AEFND avec #-transitions -> Calcul des #-fermeture puis transiter
 	 */
 	
-	public void determinisation(Moteur m) {
+	public void determinisation() {
 		
 		
+		if (this.avecLambda()) {											// AEFND avec #-transitions
+			
+			System.out.println("AEFND avec #-transitions");
+		} else if (!this.avecLambda()) {									// AEFND sans #-transitions
+			
+			System.out.println("AEFND sans #-transitions");
+			this.transiterTousEtats(this.getEtatInit(), this.getAlphabetEntree());
+		}
 	}
-	
-	
 	
 	// Calcul un super etat pour un etat initial avec une entree
 	public SuperEtat transiterUnEtat(Etat etat, String string) {
 		
-		SuperEtat s = new SuperEtat();
+		SuperEtat s = new SuperEtat("D");
+		String nom = "";
 		
 		for (int i = 0; i < this.getTransitions().size(); i++) {
 			
-			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNomEtat()) && this.getTransitions().get(i).getEntree().equals(string)) {
+			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNom()) && this.getTransitions().get(i).getEntree().equals(string)) {
 				
 				Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
+				nom += this.getTransitions().get(i).getEtatFinal();
 				s.addEtat(e);
 			}
 		}
 		
+		// S'il n'existe pas de transition pour l'etat et l'entree
+		if (s.getSuperEtats().isEmpty()) {
+			
+			return s = null;
+		} 
+		
+		s.setNom(s.getNom()+nom);
+		System.out.println("Creation du super-etat : " +s.getNom());
 		return s;
 	}
 	
 	// Calcul tous les super etat de l'automate
 	public ArrayList<SuperEtat> transiterTousEtats(ArrayList<Etat> e, ArrayList<String> entrees) {
 		
-		ArrayList<SuperEtat> superEtats = new ArrayList<SuperEtat>();
+		ArrayList<SuperEtat> pileSuperEtats = new ArrayList<SuperEtat>();
 		SuperEtat s;
 		
 		for (int i = 0; i < e.size(); i++) {
 			
 			for (int j = 0; j < entrees.size(); j++) {
 				
-				s = transiterUnEtat(e.get(i), entrees.get(i));
-				superEtats.add(s);
+				s = transiterUnEtat(e.get(i), entrees.get(j));
+				pileSuperEtats.add(s);
 			}
 		}
 		
-		return superEtats;
+		return pileSuperEtats;
 	}
+	
+	public void transiter(Etat e, ArrayList<String> entrees) {
+		
+		for (int j = 0; j < entrees.size(); j++) {
+			
+			for (int i = 0; i < this.getTransitions().size(); i++) {
+			
+				if (this.getTransitions().get(i).getEtatInit().equals(e) && this.getTransitions().get(i).getEntree().equals(entrees.get(j))) {
+					
+					Etat nouveauEtat = new Etat(getTransitions().get(i).getEtatFinal());
+				}
+			}
+		}
+	}
+	
+	
+	public boolean avecLambda() {
+		
+		boolean b = false;
+		
+		for (int i = 0; i < this.getTransitions().size(); i++) {
+			
+			if (this.getTransitions().get(i).getEntree().equals(Character.toString(this.getMeta()))) {
+				
+				return b = true;
+			}
+		}
+		
+		return b;
+	}
+	
 	
 	
 	/**

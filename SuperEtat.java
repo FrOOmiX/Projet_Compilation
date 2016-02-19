@@ -2,16 +2,21 @@ import java.util.ArrayList;
 
 public class SuperEtat {
 	
+	private String nom;
 	private ArrayList<Etat> superEtats;
 	
 	// Constructeur
-	public SuperEtat(){
+	public SuperEtat(String leNom){
 		
+		this.nom = leNom;
 		this.superEtats = new ArrayList<Etat>();
 	}
 
 	// Getters/Setters
 	public ArrayList<Etat> getSuperEtats() { return this.superEtats; }
+	public String getNom() { return this.nom; }
+	
+	public void setNom(String nom) { this.nom = nom; }
 	public void setSuperEtats(ArrayList<Etat> superEtats) { this.superEtats = superEtats; }
 	
 	// Methode d'ajout d'etats
@@ -27,7 +32,7 @@ public class SuperEtat {
 		
 		for (int i = 0; i < this.getSuperEtats().size(); i++) {
 			
-			str += this.getSuperEtats().get(i).getNomEtat()+ " ";
+			str += this.getSuperEtats().get(i).getNom()+ " ";
 		}
 		
 		str += "}";

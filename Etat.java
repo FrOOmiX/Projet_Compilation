@@ -1,14 +1,16 @@
 public class Etat {
 	
-	String nomEtat;
-	char nom;
+	// Attributs
+	private String nom;
 	
-	public Etat(String nom) {
+	// Constructeur
+	public Etat(String leNom) {
 		
-		this.nomEtat = nom;
+		this.nom = leNom;
 	}
 
-	public String getNomEtat() { return this.nomEtat; }
+	// Getters/Setters
+	public String getNom() { return this.nom; }
 
-	public void setNomEtat(String nomEtat) { this.nomEtat = nomEtat; }
+	public void setNom(String nom) { this.nom = nom; }
 }
