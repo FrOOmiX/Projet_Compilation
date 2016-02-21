@@ -85,16 +85,13 @@ public class Moteur {
 					}
 				}// If O
 
-				else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
-
-					if (ligne.charAt(i) != ' ' && i > 0) {
+			else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
+						String str [] = ligne.split("\\s");
 						
-						// Pour l'instant on recupere un seul chiffre, il faudrait pouvoir recuperer le chiffre entier si >= 10
-						nbEtats = Character.getNumericValue((ligne.charAt(i)));
-					}
-					
-					i++;
+						//A tester et voir s'il faut caster le str en int pour correspondre a nbEtats.
+						nbEtats = str[1];
 				}// If E
+
 
 				else if (ligne.charAt(0) == 'I' && i < ligne.length()) {
 					this.etatInit = new ArrayList<String>();
