@@ -85,11 +85,9 @@ public class Moteur {
 					}
 				}// If O
 
-			else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
-						String str [] = ligne.split("\\s");
-						
-						//A tester et voir s'il faut caster le str en int pour correspondre a nbEtats.
-						nbEtats = str[1];
+				else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
+							String etat [] = ligne.split("\\s");
+							nbEtats = Integer.parseInt(etat[1]);
 				}// If E
 
 
