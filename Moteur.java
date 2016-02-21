@@ -440,15 +440,16 @@ public class Moteur {
 	
 	
 	
-	/**
-	 * 
-	 * Partie determinisation
-	 * 
-	 * 2 cas :
-	 * 		- AEFND sans #-transitions -> On utilise juste les fonctions transiter
-	 * 		- AEFND avec #-transitions -> Calcul des #-fermeture puis transiter
-	 */
+
+	/***********************/
+	/*** DETERMINISATION ***/
+	/***********************/
 	
+	/**
+	2 cas :
+		- AEFND sans #-transitions -> On utilise juste les fonctions transiter
+		- AEFND avec #-transitions -> Calcul des #-fermeture puis transiter
+	*/  
 	public void determinisation() {
 		
 		
@@ -458,19 +459,55 @@ public class Moteur {
 		} else if (!this.avecLambda()) {									// AEFND sans #-transitions
 			
 			System.out.println("AEFND sans #-transitions");
-			this.transiterTousEtats(this.getEtatInit(), this.getAlphabetEntree());
+			
+			// Initialisation de la pile (sur etat init) et compteur de pile
+			ArrayList<SuperEtat> pile = new ArrayList<SuperEtat>();
+			SuperEtat etatInit = new SuperEtat(this.getEtats().get(0).getNom());
+			
+			etatInit.addEtat(this.getEtats().get(0));
+			pile.add(etatInit);
+			
+			int i = 0;
+			
+			// Initialisation etats finaux
+			ArrayList<SuperEtat> etatFinaux = new ArrayList<SuperEtat>();
+			
+			while (!pile.isEmpty()) {
+				
+				etatFinaux.add(pile.get(i));
+				
+				for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
+					
+					SuperEtat superEtat = this.transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j));
+					
+					if (!etatFinaux.contains(superEtat)) {
+						
+						pile.add(superEtat);
+					}
+				}
+				
+				i++;
+			}
 		}
 	}
 	
-	// Calcul un super etat pour un etat initial avec une entree
-	public SuperEtat transiterUnEtat(Etat etat, String string) {
+	
+	/**
+	 * 
+	 * Fonction de transition, renvoie un super etat composé des etats finaux pour une entree et l'etat de depart
+	 * 
+	 * @param etat
+	 * @param string
+	 * @return SuperEtat
+	 */
+	public SuperEtat transiter(SuperEtat etat, String entree) {
 		
-		SuperEtat s = new SuperEtat("D");
 		String nom = "";
+		SuperEtat s = new SuperEtat(nom);
 		
 		for (int i = 0; i < this.getTransitions().size(); i++) {
 			
-			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNom()) && this.getTransitions().get(i).getEntree().equals(string)) {
+			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNom()) && this.getTransitions().get(i).getEntree().equals(entree)) {
 				
 				Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
 				nom += this.getTransitions().get(i).getEtatFinal();
@@ -482,46 +519,18 @@ public class Moteur {
 		if (s.getSuperEtats().isEmpty()) {
 			
 			return s = null;
-		} 
-		
+		}
+				
 		s.setNom(s.getNom()+nom);
 		System.out.println("Creation du super-etat : " +s.getNom());
 		return s;
 	}
 	
-	// Calcul tous les super etat de l'automate
-	public ArrayList<SuperEtat> transiterTousEtats(ArrayList<Etat> e, ArrayList<String> entrees) {
-		
-		ArrayList<SuperEtat> pileSuperEtats = new ArrayList<SuperEtat>();
-		SuperEtat s;
-		
-		for (int i = 0; i < e.size(); i++) {
-			
-			for (int j = 0; j < entrees.size(); j++) {
-				
-				s = transiterUnEtat(e.get(i), entrees.get(j));
-				pileSuperEtats.add(s);
-			}
-		}
-		
-		return pileSuperEtats;
-	}
-	
-	public void transiter(Etat e, ArrayList<String> entrees) {
-		
-		for (int j = 0; j < entrees.size(); j++) {
-			
-			for (int i = 0; i < this.getTransitions().size(); i++) {
-			
-				if (this.getTransitions().get(i).getEtatInit().equals(e) && this.getTransitions().get(i).getEntree().equals(entrees.get(j))) {
-					
-					Etat nouveauEtat = new Etat(getTransitions().get(i).getEtatFinal());
-				}
-			}
-		}
-	}
-	
-	
+	/**
+	 * Fonction qui reconnait si un automate est avec ou sans #-transitions
+	 * 
+	 * @return boolean
+	 */
 	public boolean avecLambda() {
 		
 		boolean b = false;
@@ -539,12 +548,9 @@ public class Moteur {
 	
 	
 	
-	/**
-	 * 
-	 * Partie exportation en .dot
-	 * 
-	 * 
-	 */
+	/************************/
+	/*** EXPORTATION .DOT ***/
+	/************************/
 	public void exportationDot() throws IOException {
 		
 		File f = new File("Exportation.dot");
