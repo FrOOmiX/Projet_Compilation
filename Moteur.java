@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Moteur {
 
@@ -86,10 +87,11 @@ public class Moteur {
 				}// If O
 
 				else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
-							String etat [] = ligne.split("\\s");
-							nbEtats = Integer.parseInt(etat[1]);
+					
+					String etat [] = ligne.split("\\s");
+					nbEtats = Integer.parseInt(etat[1]);
+					ligne = str.readLine();
 				}// If E
-
 
 				else if (ligne.charAt(0) == 'I' && i < ligne.length()) {
 					this.etatInit = new ArrayList<String>();
@@ -216,16 +218,19 @@ public class Moteur {
 	}
 	
 	public void afficherEtats() {
-		
-		String str = "Les etats sont : ";
-		
-		for (int i = 0; i < this.getEtats().size(); i++) {
-			
-			str += this.getEtats().get(i).getNom()+ " ";
-		}
-		
-		System.out.println(str);
-	}
+	       
+        if (this.getNbEtats() != 0 ) {
+        	
+            String str = "Les etats sont : ";
+           
+            for (int i = 0; i < this.getEtats().size(); i++) {
+               
+                str += this.getEtats().get(i).getNom()+ " ";
+            }
+           
+            System.out.println(str);
+        }
+    }
 	
 	public void afficheEtatInit() {
 		try{
@@ -287,28 +292,36 @@ public class Moteur {
 	public ArrayList<String> getSorties() { return this.sorties; }
 	public int getNbEtats() { return this.nbEtats; }
 	public ArrayList<Etat> getEtats() { return this.etats; }
-	public ArrayList<String> getEtatInit() {	return this.etatInit; }
+	public ArrayList<String> getEtatInit() { return this.etatInit; }
 	public ArrayList<String> getEtatsAcceptants() { return this.etatsAcceptants; }
 	public ArrayList<Transition> getTransitions() { return this.transitions; }
 	public void setEtats() {
 		
 		this.etats = new ArrayList<Etat>();
-		
-		for (int i = 0; i < this.getNbEtats(); i++) {
-			
-			Etat e = new Etat(String.valueOf(i));
-			etats.add(e);
-		}
+	       
+        for (int i = 0; i < this.transitions.size(); i++) {
+           
+            Etat etatInit = new Etat(transitions.get(i).getEtatInit());
+            Etat etatFinal = new Etat(transitions.get(i).getEtatFinal());
+           
+            if (!etats.contains(etatInit)) {
+            	
+                etats.add(etatInit);
+            } 
+            
+            if (!etats.contains(etatFinal)) {
+            	
+                etats.add(etatFinal);
+            }
+        }
 	}
 	
 	
 	
 	
-	/**
-	 * 
-	 * Traitement des entrees
-	 * 
-	 */
+	/******************************/
+	/*** TRAITEMENT DES ENTREES ***/
+	/******************************/
 	public void traitementEntrees(String entrees) {
 		
 		int i = 0, j = 0, cptDiese = 0;
@@ -461,28 +474,33 @@ public class Moteur {
 			System.out.println("AEFND sans #-transitions");
 			
 			// Initialisation de la pile (sur etat init) et compteur de pile
-			ArrayList<SuperEtat> pile = new ArrayList<SuperEtat>();
+			Stack<SuperEtat> pile = new Stack<SuperEtat>();
 			SuperEtat etatInit = new SuperEtat(this.getEtats().get(0).getNom());
-			
 			etatInit.addEtat(this.getEtats().get(0));
-			pile.add(etatInit);
+			System.out.println("Creation du super-etat : " +etatInit.getNom());
+			
+			pile.push(etatInit);
 			
 			int i = 0;
 			
 			// Initialisation etats finaux
 			ArrayList<SuperEtat> etatFinaux = new ArrayList<SuperEtat>();
 			
-			while (!pile.isEmpty()) {
+			while (!pile.empty()) {
 				
-				etatFinaux.add(pile.get(i));
+				etatFinaux.add(pile.pop());
 				
 				for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
 					
 					SuperEtat superEtat = this.transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j));
 					
-					if (!etatFinaux.contains(superEtat)) {
+					if (superEtat != null) {
 						
-						pile.add(superEtat);
+						if (!etatFinaux.contains(superEtat)) {
+								
+							pile.push(superEtat);
+							System.out.println("Creation du super-etat : " +superEtat.getNom());
+						}
 					}
 				}
 				
@@ -507,11 +525,18 @@ public class Moteur {
 		
 		for (int i = 0; i < this.getTransitions().size(); i++) {
 			
-			if (this.getTransitions().get(i).getEtatInit().equals(etat.getNom()) && this.getTransitions().get(i).getEntree().equals(entree)) {
-				
-				Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
-				nom += this.getTransitions().get(i).getEtatFinal();
-				s.addEtat(e);
+			for (int j = 0; j < etat.getSuperEtats().size(); j++) {
+		
+				if (this.getTransitions().get(i).getEtatInit().equals(etat.getSuperEtats().get(j).getNom()) && this.getTransitions().get(i).getEntree().equals(entree)) {
+					
+					Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
+					
+					if (!s.getSuperEtats().contains(e)) {
+						
+						nom += this.getTransitions().get(i).getEtatFinal();
+						s.addEtat(e);
+					}
+				}
 			}
 		}
 		
@@ -522,7 +547,6 @@ public class Moteur {
 		}
 				
 		s.setNom(s.getNom()+nom);
-		System.out.println("Creation du super-etat : " +s.getNom());
 		return s;
 	}
 	
@@ -547,13 +571,26 @@ public class Moteur {
 	}
 	
 	
+	/**************************/
+	/*** EXPORTATION .DESCR ***/
+	/**************************/
+	public void exportationDescr(Moteur m) throws IOException {
+		
+		File f = new File("ExportationDescr.descr");
+		FileWriter fw = new FileWriter(f);
+		
+		String entrees = "V ";
+	}
+	
+	
+	
 	
 	/************************/
 	/*** EXPORTATION .DOT ***/
 	/************************/
 	public void exportationDot() throws IOException {
 		
-		File f = new File("Exportation.dot");
+		File f = new File("ExportationDot.dot");
 		FileWriter fw = new FileWriter(f);
 		
 		// Squelette du fichier .dot

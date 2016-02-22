@@ -25,15 +25,7 @@ public class TestMoteur {
 			moteur.afficheAlphabetSortie();
 			moteur.afficheTransitions();
 		}
-		
-		/*
-		// Affichage de transiter
-		System.out.println("\nTransiter : ");
-		Etat e = new Etat("0");
-		SuperEtat superEtat = moteur.transiterUnEtat(e, "a");
-		System.out.println(superEtat.toString());
-		*/
-		
+				
 		// Determinisation
 		System.out.println("\nDeterminisation : ");
 		moteur.determinisation();
