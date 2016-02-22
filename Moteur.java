@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Moteur {
-
-	private char meta; 										// meta caractere pour arreter la saisie
-	private String commentaire;								// commentaires
-	private ArrayList<String> alphabetEntree; 			// liste du vocabulaire d'entree
-	private ArrayList<String> sorties; 					// liste du vocabulaire de sortie
-	private int nbEtats; 									// nombre d'etats dans l'AEF
-	private ArrayList<String> etatInit; 					// liste des etats init de l'AEF
-	private ArrayList<String> etatsAcceptants; 			// liste des etats acceptant
-	private ArrayList<Transition> transitions; 				// liste des transitions
-	private ArrayList<Etat> etats;
+	
+	// Attributs
+	private char meta; 										// Meta caractere pour arreter la saisie
+	private String commentaire;								// Commentaires
+	private ArrayList<String> alphabetEntree; 				// Liste du vocabulaire d'entree
+	private ArrayList<String> sorties; 						// Liste du vocabulaire de sortie
+	private int nbEtats; 									// Nombre d'etats
+	private ArrayList<String> etatInit; 					// Liste des etats initiaux
+	private ArrayList<String> etatsAcceptants; 				// Liste des etats acceptants
+	private ArrayList<Transition> transitions; 				// Liste des transitions
+	private ArrayList<Etat> etats;							// Liste de tous les etats
 	
 	// Constructeur
 	public Moteur(String nomFichier) {
@@ -150,6 +151,9 @@ public class Moteur {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 	
 	/**
 	 * 
@@ -463,7 +467,7 @@ public class Moteur {
 		- AEFND sans #-transitions -> On utilise juste les fonctions transiter
 		- AEFND avec #-transitions -> Calcul des #-fermeture puis transiter
 	*/  
-	public void determinisation() {
+	public void determinisation() throws IOException {
 		
 		
 		if (this.avecLambda()) {											// AEFND avec #-transitions
@@ -486,15 +490,25 @@ public class Moteur {
 			// Initialisation etats finaux
 			ArrayList<SuperEtat> etatFinaux = new ArrayList<SuperEtat>();
 			
+			// Initialisation des transitions
+			ArrayList<Transition> transitions = new ArrayList<Transition>();
+			
 			while (!pile.empty()) {
 				
 				etatFinaux.add(pile.pop());
 				
 				for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
 					
-					SuperEtat superEtat = this.transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j));
-					
+					SuperEtat superEtat = this.transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j), transitions);
+							
 					if (superEtat != null) {
+						
+						Transition tr = new Transition(etatFinaux.get(i).getNom(), this.getAlphabetEntree().get(j), superEtat.getNom());
+						
+						if (!transitions.contains(tr)) {
+							
+							transitions.add(tr);
+						}
 						
 						if (!etatFinaux.contains(superEtat)) {
 								
@@ -506,6 +520,8 @@ public class Moteur {
 				
 				i++;
 			}
+			
+			this.exportationDescr(etatFinaux, transitions);
 		}
 	}
 	
@@ -518,7 +534,7 @@ public class Moteur {
 	 * @param string
 	 * @return SuperEtat
 	 */
-	public SuperEtat transiter(SuperEtat etat, String entree) {
+	public SuperEtat transiter(SuperEtat etat, String entree, ArrayList<Transition> transitions) {
 		
 		String nom = "";
 		SuperEtat s = new SuperEtat(nom);
@@ -571,15 +587,59 @@ public class Moteur {
 	}
 	
 	
+	
+	
 	/**************************/
 	/*** EXPORTATION .DESCR ***/
 	/**************************/
-	public void exportationDescr(Moteur m) throws IOException {
+	public void exportationDescr(ArrayList<SuperEtat> superEtats, ArrayList<Transition> transitions) throws IOException {
 		
 		File f = new File("ExportationDescr.descr");
 		FileWriter fw = new FileWriter(f);
 		
-		String entrees = "V ";
+		// Ecriture des entrees
+		String entrees = "V \"";
+		
+		for (int i = 0; i < this.getAlphabetEntree().size(); i++) {
+			
+			entrees += this.getAlphabetEntree().get(i);
+		}
+		
+		fw.write(entrees+"\"");
+		
+		// Ecriture nombre d'etats
+		fw.write("\nE " +superEtats.size());
+		
+		// Ecriture etat initial		
+		fw.write("\nI " +superEtats.get(0).getNom());
+		
+		// Ecriture etat final (Demander a Steven de modifier les etats finaux)		
+		String etatsFinaux = "\nF ";
+		
+		for (int i = 0; i < superEtats.size(); i++) {
+			
+			for (int j = 0; j < this.getEtatsAcceptants().size(); j++) {
+				
+				if (superEtats.get(i).getNom().contains(this.getEtatsAcceptants().get(j))) {
+			
+					etatsFinaux += superEtats.get(i).getNom()+ " ";
+				}
+			}
+		}
+		
+		fw.write(etatsFinaux);
+		
+		// Ecriture des transitions
+		for (int i = 0; i < transitions.size(); i++) {
+			
+			fw.write("\nT " +transitions.get(i).getEtatInit()+ 
+					 " \'" +transitions.get(i).getEntree()+ 
+					 "\' " +transitions.get(i).getEtatFinal());
+		}
+		
+		// Fermeture fichier
+		fw.write("\n");
+		fw.close();
 	}
 	
 	

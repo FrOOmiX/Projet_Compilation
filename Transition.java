@@ -1,10 +1,12 @@
 public class Transition {
 	
+	// Attributs
 	private String etatInit;
 	private String etatFinal;
 	private String entree;
 	private String sortie;
 	
+	// Constructeurs
 	public Transition(String init, String entree, String fin, String sortie) {
 		
 		this.etatInit = init;
@@ -21,35 +23,14 @@ public class Transition {
 		this.sortie = "#";
 	}
 	
-	public String getEtatInit() {
-		return this.etatInit;
-	}
+	// Getters/Setters
+	public String getEtatInit() { return this.etatInit;	}
+	public String getEntree() {	return this.entree;	}
+	public String getEtatFinal() { return this.etatFinal; }
+	public String getSortie() {	return this.sortie;	}
 
-	public void setEtatInit(String etatInit) {
-		this.etatInit = etatInit;
-	}
-
-	public String getEtatFinal() {
-		return this.etatFinal;
-	}
-
-	public void setEtatFinal(String etatFinal) {
-		this.etatFinal = etatFinal;
-	}
-
-	public String getEntree() {
-		return this.entree;
-	}
-
-	public void setEntree(String entree) {
-		this.entree = entree;
-	}
-
-	public String getSortie() {
-		return this.sortie;
-	}
-
-	public void setSortie(String sortie) {
-		this.sortie = sortie;
-	}
+	public void setEtatInit(String etatInit) { this.etatInit = etatInit; }
+	public void setEntree(String entree) { this.entree = entree; }
+	public void setEtatFinal(String etatFinal) { this.etatFinal = etatFinal; }
+	public void setSortie(String sortie) { this.sortie = sortie; }
 }

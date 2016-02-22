@@ -9,11 +9,14 @@ public class TestMoteur {
 
 	public static void main(String[] args) throws IOException {
 		
+		// Creation moteur de base
 		Moteur moteur = null;
 		
 		if (verificationFichier("NDtest.descr")) {
 			
 			moteur = new Moteur("NDtest.descr");
+			
+			System.out.println("----- Moteur de base -----\n");
 			moteur.afficherCommentaire();
 			moteur.afficheMetaChar();
 			moteur.afficheAlphabetEntree();
@@ -30,11 +33,30 @@ public class TestMoteur {
 		System.out.println("\nDeterminisation : ");
 		moteur.determinisation();
 		
+		// Exportation .descr & .dot
+		Moteur determinise = null;
+		
+		if (verificationFichier("ExportationDescr.descr")) {
+			
+			determinise = new Moteur("ExportationDescr.descr");
+			
+			System.out.println("\n----- Moteur determinise -----\n");
+			determinise.afficherCommentaire();
+			determinise.afficheMetaChar();
+			determinise.afficheAlphabetEntree();
+			determinise.afficheEtatInit();
+			determinise.afficheNombreEtat();
+			determinise.setEtats();
+			determinise.afficherEtats();
+			determinise.afficheEtatsAcceptants();
+			determinise.afficheAlphabetSortie();
+			determinise.afficheTransitions();
+			
+			determinise.exportationDot();
+		}
+		
 		// Traitement des entrees
 		//moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
-		
-		// Exportation en .dot
-		//moteur.exportationDot();
 	}
 	
 	public static boolean verificationFichier(String nomFichier) throws IOException {
