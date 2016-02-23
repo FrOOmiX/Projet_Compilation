@@ -12,9 +12,9 @@ public class TestMoteur {
 		// Creation moteur de base
 		Moteur moteur = null;
 		
-		if (verificationFichier("NDtest.descr")) {
+		if (verificationFichier("NDSL02.descr")) {
 			
-			moteur = new Moteur("NDtest.descr");
+			moteur = new Moteur("NDSL02.descr");
 			
 			System.out.println("----- Moteur de base -----\n");
 			moteur.afficherCommentaire();

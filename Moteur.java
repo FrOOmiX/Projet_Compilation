@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 public class Moteur {
@@ -109,16 +110,20 @@ public class Moteur {
 				}// If I
 
 				else if (ligne.charAt(0) == 'F' && i < ligne.length()) {
+					
 					this.etatsAcceptants = new ArrayList<String>();
-					while (i < ligne.length()) {
-
-						if (ligne.charAt(i) != ' ' && i > 0) {
-
-							etatsAcceptants.add(String.valueOf(ligne.charAt(i)));
-
-						}
-						i++;
-					}
+                    String[] finaux = ligne.split("\\s");
+                    
+                    int j = 1;
+                   
+                    while (j < finaux.length) {
+                    	
+                        etatsAcceptants.add(finaux[j]);
+                        j++;
+                    }
+                    
+                    ligne = str.readLine();
+					
 				}// If F
 				
 				else if (ligne.charAt(0) == 'T' && i < ligne.length()) {
@@ -479,13 +484,33 @@ public class Moteur {
 			
 			// Initialisation de la pile (sur etat init) et compteur de pile
 			Stack<SuperEtat> pile = new Stack<SuperEtat>();
-			SuperEtat etatInit = new SuperEtat(this.getEtats().get(0).getNom());
-			etatInit.addEtat(this.getEtats().get(0));
+			SuperEtat etatInit = new SuperEtat("");
+			Etat e = null;
+			int i = 0;
+			
+			// Si plusieurs etats initiaux (ne sert a rien)
+			if (this.getEtatInit().size() > 1) {
+				
+				String nom = "";
+				
+				for (int j = 0; j < this.getEtatInit().size(); j++) {
+					
+					e = new Etat(this.getEtatInit().get(j));
+					etatInit.addEtat(e);
+					nom += e.getNom();
+				}
+				
+				etatInit.setNom(nom);
+			} else {
+				
+				e = new Etat(this.getEtatInit().get(0));
+				etatInit.addEtat(e);
+				etatInit.setNom(e.getNom());
+			}
+			
 			System.out.println("Creation du super-etat : " +etatInit.getNom());
 			
 			pile.push(etatInit);
-			
-			int i = 0;
 			
 			// Initialisation etats finaux
 			ArrayList<SuperEtat> etatFinaux = new ArrayList<SuperEtat>();
@@ -499,17 +524,20 @@ public class Moteur {
 				
 				for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
 					
-					SuperEtat superEtat = this.transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j), transitions);
+					SuperEtat superEtat = this.transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j));
 							
 					if (superEtat != null) {
 						
+						// Creation de la transition correspondante
 						Transition tr = new Transition(etatFinaux.get(i).getNom(), this.getAlphabetEntree().get(j), superEtat.getNom());
 						
+						// Si la transition n'est pas deja existante
 						if (!transitions.contains(tr)) {
 							
 							transitions.add(tr);
 						}
 						
+						// Si l'etat n'a pas encore ete traite, on l'ajoute a la pile
 						if (!etatFinaux.contains(superEtat)) {
 								
 							pile.push(superEtat);
@@ -521,20 +549,20 @@ public class Moteur {
 				i++;
 			}
 			
+			// Exportation dans un nouveau format .descr correspondant
 			this.exportationDescr(etatFinaux, transitions);
 		}
 	}
-	
 	
 	/**
 	 * 
 	 * Fonction de transition, renvoie un super etat composé des etats finaux pour une entree et l'etat de depart
 	 * 
-	 * @param etat
-	 * @param string
-	 * @return SuperEtat
+	 * @param etat SuperEtat a traiter
+	 * @param entree Caractere utilise pour la transition
+	 * @return Un nouveau SuperEtat
 	 */
-	public SuperEtat transiter(SuperEtat etat, String entree, ArrayList<Transition> transitions) {
+	public SuperEtat transiter(SuperEtat etat, String entree) {
 		
 		String nom = "";
 		SuperEtat s = new SuperEtat(nom);
@@ -569,7 +597,7 @@ public class Moteur {
 	/**
 	 * Fonction qui reconnait si un automate est avec ou sans #-transitions
 	 * 
-	 * @return boolean
+	 * @return true si l'automate contient des #-transitions, sinon false
 	 */
 	public boolean avecLambda() {
 		
@@ -613,7 +641,7 @@ public class Moteur {
 		// Ecriture etat initial		
 		fw.write("\nI " +superEtats.get(0).getNom());
 		
-		// Ecriture etat final (Demander a Steven de modifier les etats finaux)		
+		// Ecriture etats finaux		
 		String etatsFinaux = "\nF ";
 		
 		for (int i = 0; i < superEtats.size(); i++) {
