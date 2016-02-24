@@ -474,10 +474,41 @@ public class Moteur {
 	*/  
 	public void determinisation() throws IOException {
 		
-		
 		if (this.avecLambda()) {											// AEFND avec #-transitions
 			
 			System.out.println("AEFND avec #-transitions");
+			
+			// Initialisation de la pile
+			Stack<SuperEtat> pile = new Stack<SuperEtat>();
+			SuperEtat temp = new SuperEtat(this.getEtatInit().get(0));
+			SuperEtat etatInit = lambdaFermeture(temp);
+			
+			// Initialisation etats finaux
+			ArrayList<SuperEtat> etatFinaux = new ArrayList<SuperEtat>();
+						
+			// Initialisation des transitions
+			ArrayList<Transition> transitions = new ArrayList<Transition>();
+						
+			System.out.println("Creation du super-etat : " +etatInit.getNom());
+			pile.push(etatInit);
+			
+			while (!pile.isEmpty()) {
+				
+				if (!etatFinaux.contains(pile.peek())) {
+					
+					etatFinaux.add(pile.pop());
+					
+					
+				}
+				
+			}
+			
+			
+			
+			
+			
+			
+			
 		} else if (!this.avecLambda()) {									// AEFND sans #-transitions
 			
 			System.out.println("AEFND sans #-transitions");
@@ -571,7 +602,8 @@ public class Moteur {
 			
 			for (int j = 0; j < etat.getSuperEtats().size(); j++) {
 		
-				if (this.getTransitions().get(i).getEtatInit().equals(etat.getSuperEtats().get(j).getNom()) && this.getTransitions().get(i).getEntree().equals(entree)) {
+				if (this.getTransitions().get(i).getEtatInit().equals(etat.getSuperEtats().get(j).getNom()) 
+						&& this.getTransitions().get(i).getEntree().equals(entree)) {
 					
 					Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
 					
@@ -592,6 +624,54 @@ public class Moteur {
 				
 		s.setNom(s.getNom()+nom);
 		return s;
+	}
+	
+	/**
+	 * Fonction qui permet de calculer les lambda fermetures pour un SuperEtat
+	 * 
+	 * @param etat SuperEtat qui doit etre traite
+	 * @return Un nouveau SuperEtat compose de tous les etats accessibles 
+	 * par une #-transition a partir d'un etat du SuperEtat initial
+	 */
+	public SuperEtat lambdaFermeture(SuperEtat etat) {
+		
+		// Initialisation
+		SuperEtat sortie = new SuperEtat("");
+		Stack<Etat> pile = new Stack<Etat>();
+		String nom = "";
+		Etat ePeek = null;
+		
+		// Empilement d'etats dans la pile
+		for (int i = 0; i < etat.getSuperEtats().size(); i++) {
+			
+			pile.push(etat.getSuperEtats().get(i));
+		}
+		
+		while (!pile.isEmpty()) {
+			
+			ePeek = pile.peek();
+			
+			if (!sortie.getSuperEtats().contains(ePeek)) {
+				
+				nom += ePeek.getNom();
+				sortie.addEtat(ePeek);
+				
+				for (int i = 0; i < this.getTransitions().size(); i++) {
+					
+					if (this.getTransitions().get(i).getEtatInit().equals(ePeek) 
+							&& this.getTransitions().get(i).getEntree().equals(this.getMeta())) {
+						
+						Etat eSortie = new Etat(this.getTransitions().get(i).getSortie());
+						pile.push(eSortie);
+					}
+				}
+			}
+			
+			pile.remove(ePeek);
+		}
+		
+		sortie.setNom(nom);
+		return sortie;
 	}
 	
 	/**

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class SuperEtat {
 	
+	// Attributs
 	private String nom;
 	private ArrayList<Etat> superEtats;
 	
@@ -39,7 +40,6 @@ public class SuperEtat {
 		return str;
 	}
 
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -48,7 +48,6 @@ public class SuperEtat {
 		return result;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
