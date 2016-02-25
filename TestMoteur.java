@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class TestMoteur {
@@ -12,9 +11,9 @@ public class TestMoteur {
 		// Creation moteur de base
 		Moteur moteur = null;
 		
-		if (verificationFichier("NDSL02.descr")) {
+		if (verificationFichier("ND03.descr")) {
 			
-			moteur = new Moteur("NDSL02.descr");
+			moteur = new Moteur("ND03.descr");
 			
 			System.out.println("----- Moteur de base -----\n");
 			moteur.afficherCommentaire();
@@ -28,7 +27,15 @@ public class TestMoteur {
 			moteur.afficheAlphabetSortie();
 			moteur.afficheTransitions();
 		}
-				
+		
+		/**
+		 * Traitement des entrees :
+		 * 
+		 * Seulement fonctionnel pour les fichier C0, S0, S1, S2, S4 et Mini
+		 */
+		//moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
+		
+		
 		// Determinisation
 		System.out.println("\nDeterminisation : ");
 		moteur.determinisation();
@@ -54,10 +61,9 @@ public class TestMoteur {
 			
 			determinise.exportationDot();
 		}
-		
-		// Traitement des entrees
-		//moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
 	}
+	
+	
 	/**
 	 * 
 	 * Methode de verification du format du fichier .descr.
@@ -65,7 +71,7 @@ public class TestMoteur {
 	 * Utilisation de la class Pattern qui permet le verification de chaque ligne du fichier
 	 * suivant la premiere de la ligne. Si la ligne correspond à l'un des patterns ci-dessous alors la fonction renvoie true sinon false.
 	 * 
-	 * @return Vrai si la ligne match, sinon false.
+	 * @return true si la ligne match, sinon false.
 	 */
 	public static boolean verificationFichier(String nomFichier) throws IOException {
 
@@ -84,7 +90,7 @@ public class TestMoteur {
 				
 				if(Pattern.matches("C[\\s]\'.*\'", ligne) 
 				|| Pattern.matches("C[\\s]\".*\"", ligne) 
-				|| Pattern.matches("M[\\s]\""+meta"\"", ligne) 
+				|| Pattern.matches("M[\\s]\'"+meta+"\'", ligne) 
 				|| Pattern.matches("V[\\s]\"[\\p{Lower}\\p{Digit}]*\"", ligne) 
 				|| Pattern.matches("O[\\s]\"[\\p{Alpha}\\p{Digit}]*\"", ligne) 
 				|| Pattern.matches("E[\\s][\\p{Digit}]*", ligne) 
@@ -101,25 +107,24 @@ public class TestMoteur {
 				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]*", ligne)
 				){
 					fichierOk=true;
-				}//if
-				
-				else {
+				} else {
 					
 					System.out.println("Erreur de syntaxe : "+ligne+"\nmerci de respecter le format .descr.");
 					erreur=true;
 					fichierOk=false;
-				}//else
+				}	//else
 				
 				ligne = str.readLine();
-			}//while
+			}	//while
 			
-		}//try
-		
-		catch (FileNotFoundException e) {
+			str.close();
+			
+		} catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
-		}//catch
+		}	//catch
+		
 		
 		return fichierOk;
-	}//verificationFichier
+	}	//verificationFichier
 }
