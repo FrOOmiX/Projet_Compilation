@@ -20,10 +20,19 @@ public class Moteur {
 	private ArrayList<Transition> transitions; 				// Liste des transitions
 	private ArrayList<Etat> etats;							// Liste de tous les etats
 	
-	// Constructeur
+	/******************************/
+	/*** CONSTRUCTEUR ***/
+	/******************************/
 	public Moteur(String nomFichier) {
 		
 		try {
+			/** 
+			 * 
+			 * Lecture du fichier grace au BufferedReader au sein du constructeur, gestion de recuperation 
+			 * de certains caracteres contenus dans le fichier .descr et initialisation et insertion dans 
+			 * les differents attributs.
+			 * 
+			 */
 			this.transitions = new ArrayList<Transition>();
 			String ligne;
 			BufferedReader str = new BufferedReader(new FileReader(nomFichier));
@@ -34,7 +43,12 @@ public class Moteur {
 			etatInit.add("0");
 			meta = '#';
 			int i = 0;
-
+			
+			/** 
+			 * Associations de plusieurs if, else if qui permet de recuperer les caracteres(charAt) ou 
+			 * chaines de caracteres(split) au sein du fichier descr.
+			 */
+			 
 			while (ligne != null) {
 				
 				if (ligne.charAt(0) == 'C' && i < ligne.length()) {
@@ -78,11 +92,10 @@ public class Moteur {
 
 					while (i < ligne.length()) {
 
-						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'
-								&& i > 0) {
-
+						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'&& i > 0) {
+							
+							//Cast de la valeur de i pour l'ajouter dans l'ArrayList de String.
 							sorties.add(String.valueOf(ligne.charAt(i)));
-
 						}
 						i++;
 					}
@@ -92,6 +105,7 @@ public class Moteur {
 					
 					String etat [] = ligne.split("\\s");
 					nbEtats = Integer.parseInt(etat[1]);
+					//Cast de etat[1] pour l'ajouter dans nbEtats.
 					ligne = str.readLine();
 				}// If E
 
@@ -141,21 +155,27 @@ public class Moteur {
 					
 				}// If T
 
-				// read the next line
+				/**
+				 * Ce test permet de remettre a 0 le i pour pouvoir recommencer 
+				 * la lecture de la ligne suivante. 
+				 */
 				else if (i == ligne.length()) {
 					i = 0;
 					ligne = str.readLine();
 				}
 
 			}// while
-
+			
+			//Fermeture du fichier.
 			str.close();
 		
+		//Recuperation d'erreur
+		}//try
 		
-		} catch (IOException e) {
+		catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
+		}//cacth
+	}//Constructeur
 	
 	
 	
@@ -587,7 +607,7 @@ public class Moteur {
 	
 	/**
 	 * 
-	 * Fonction de transition, renvoie un super etat composé des etats finaux pour une entree et l'etat de depart
+	 * Fonction de transition, renvoie un super etat composÃ© des etats finaux pour une entree et l'etat de depart
 	 * 
 	 * @param etat SuperEtat a traiter
 	 * @param entree Caractere utilise pour la transition
