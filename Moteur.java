@@ -111,15 +111,9 @@ public class Moteur {
 
 				else if (ligne.charAt(0) == 'I' && i < ligne.length()) {
 					this.etatInit = new ArrayList<String>();
-					while (i < ligne.length()) {
-
-						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'
-								&& i > 0) {
-
-							etatInit.add(String.valueOf(ligne.charAt(i)));
-
-						}
-						i++;
+						String etatInitial [] = ligne.split("\\s");
+						etatInit.add(etatInitial[1]);
+						ligne = str.readLine();
 					}
 				}// If I
 
