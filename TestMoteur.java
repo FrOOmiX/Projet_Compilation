@@ -84,7 +84,7 @@ public class TestMoteur {
 				
 				if(Pattern.matches("C[\\s]\'.*\'", ligne) 
 				|| Pattern.matches("C[\\s]\".*\"", ligne) 
-				|| Pattern.matches("M[\\s]"+meta, ligne) 
+				|| Pattern.matches("M[\\s]\""+meta"\"", ligne) 
 				|| Pattern.matches("V[\\s]\"[\\p{Lower}\\p{Digit}]*\"", ligne) 
 				|| Pattern.matches("O[\\s]\"[\\p{Alpha}\\p{Digit}]*\"", ligne) 
 				|| Pattern.matches("E[\\s][\\p{Digit}]*", ligne) 
