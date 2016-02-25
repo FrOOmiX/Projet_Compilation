@@ -4,7 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Stack;
 
 public class Moteur {
@@ -20,12 +20,16 @@ public class Moteur {
 	private ArrayList<Transition> transitions; 				// Liste des transitions
 	private ArrayList<Etat> etats;							// Liste de tous les etats
 	
-	/******************************/
+	
+	
+	
+	/********************/
 	/*** CONSTRUCTEUR ***/
-	/******************************/
+	/********************/
 	public Moteur(String nomFichier) {
 		
 		try {
+			
 			/** 
 			 * 
 			 * Lecture du fichier grace au BufferedReader au sein du constructeur, gestion de recuperation 
@@ -48,7 +52,7 @@ public class Moteur {
 			 * Associations de plusieurs if, else if qui permet de recuperer les caracteres(charAt) ou 
 			 * chaines de caracteres(split) au sein du fichier descr.
 			 */
-			 
+			
 			while (ligne != null) {
 				
 				if (ligne.charAt(0) == 'C' && i < ligne.length()) {
@@ -60,17 +64,16 @@ public class Moteur {
 						}
 						i++;
 					}
-				}// If C
+				}	// If C
 				
 				else if (ligne.charAt(0) == 'M' && i < ligne.length()) {
-					while (i < ligne.length()) {
 
-						if (ligne.charAt(i) != ' ' && i > 0) {
-							meta=ligne.charAt(i);
-						}	 
-						i++;
-					}
-				}// If M
+					String metaC []= ligne.split("\\s");
+                    String temp=metaC[1];
+                    meta=temp.charAt(1);
+                    ligne = str.readLine();
+                    
+				}	// If M
 				
 				else if (ligne.charAt(0) == 'V' && i < ligne.length()) {
 					this.alphabetEntree = new ArrayList<String>();
@@ -85,21 +88,23 @@ public class Moteur {
 						}
 						i++;
 					}
-				}// If V
+				}	// If V
 
 				else if (ligne.charAt(0) == 'O' && i < ligne.length()) {
 					this.sorties = new ArrayList<String>();
 
 					while (i < ligne.length()) {
 
-						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'&& i > 0) {
+						if (ligne.charAt(i) != ' ' && ligne.charAt(i) != '"'
+								&& i > 0) {
 							
 							//Cast de la valeur de i pour l'ajouter dans l'ArrayList de String.
 							sorties.add(String.valueOf(ligne.charAt(i)));
+
 						}
 						i++;
 					}
-				}// If O
+				}	// If O
 
 				else if (ligne.charAt(0) == 'E' && i < ligne.length()) {
 					
@@ -107,14 +112,17 @@ public class Moteur {
 					nbEtats = Integer.parseInt(etat[1]);
 					//Cast de etat[1] pour l'ajouter dans nbEtats.
 					ligne = str.readLine();
-				}// If E
+				}	// If E
 
 				else if (ligne.charAt(0) == 'I' && i < ligne.length()) {
+					
+					
 					this.etatInit = new ArrayList<String>();
-						String etatInitial [] = ligne.split("\\s");
-						etatInit.add(etatInitial[1]);
-						ligne = str.readLine();
-				}// If I
+                    String etatInitial [] = ligne.split("\\s");
+                    etatInit.add(etatInitial[1]);
+                    ligne = str.readLine();
+             	
+				}	// If I
 
 				else if (ligne.charAt(0) == 'F' && i < ligne.length()) {
 					
@@ -131,7 +139,7 @@ public class Moteur {
                     
                     ligne = str.readLine();
 					
-				}// If F
+				}	// If F
 				
 				else if (ligne.charAt(0) == 'T' && i < ligne.length()) {
 								String s [] = ligne.split("\\s");
@@ -146,7 +154,7 @@ public class Moteur {
 								ligne = str.readLine();
 								
 					
-				}// If T
+				}	// If T
 
 				/**
 				 * Ce test permet de remettre a 0 le i pour pouvoir recommencer 
@@ -157,27 +165,23 @@ public class Moteur {
 					ligne = str.readLine();
 				}
 
-			}// while
+			}	// while
 			
 			//Fermeture du fichier.
 			str.close();
 		
-		//Recuperation d'erreur
-		}//try
-		
-		catch (IOException e) {
+		} catch (IOException e) {
+			
 			e.printStackTrace();
-		}//cacth
-	}//Constructeur
+		}	//catch
+	}	//Constructeur
 	
 	
 	
 	
-	/**
-	 * 
-	 * Methodes d'affichage
-	 * 
-	 */
+	/*****************************/
+	/*** FONCTIONS D'AFFICHAGE ***/
+	/*****************************/
 	public void afficherCommentaire(){
 		try{
 			if(!this.getCommentaire().isEmpty())
@@ -303,11 +307,12 @@ public class Moteur {
 		}
 	}
 
-	/**
-	 * 
-	 * Getters/Setters
-	 *
-	 */
+	
+	
+	
+	/***********************/
+	/*** GETTERS/SETTERS ***/
+	/***********************/
 	public String getCommentaire() { return this.commentaire; }
 	public ArrayList<String> getAlphabetEntree() { return this.alphabetEntree; }
 	public char getMeta() {	return this.meta; }
@@ -326,12 +331,12 @@ public class Moteur {
             Etat etatInit = new Etat(transitions.get(i).getEtatInit());
             Etat etatFinal = new Etat(transitions.get(i).getEtatFinal());
            
-            if (!etats.contains(etatInit)) {
+            if (!this.etats.contains(etatInit)) {
             	
-                etats.add(etatInit);
+                this.etats.add(etatInit);
             } 
             
-            if (!etats.contains(etatFinal)) {
+            if (!this.etats.contains(etatFinal)) {
             	
                 etats.add(etatFinal);
             }
@@ -474,7 +479,6 @@ public class Moteur {
 	
 	
 	
-	
 
 	/***********************/
 	/*** DETERMINISATION ***/
@@ -493,8 +497,14 @@ public class Moteur {
 			
 			// Initialisation de la pile
 			Stack<SuperEtat> pile = new Stack<SuperEtat>();
-			SuperEtat temp = new SuperEtat(this.getEtatInit().get(0));
+			
+			// Initialisation de l'etat init
+			Etat e = new Etat(this.getEtatInit().get(0));
+			SuperEtat temp = new SuperEtat(e.getNom());
+			temp.addEtat(e);
 			SuperEtat etatInit = lambdaFermeture(temp);
+			
+			int i = 0;
 			
 			// Initialisation etats finaux
 			ArrayList<SuperEtat> etatFinaux = new ArrayList<SuperEtat>();
@@ -506,22 +516,41 @@ public class Moteur {
 			pile.push(etatInit);
 			
 			while (!pile.isEmpty()) {
+					
+				etatFinaux.add(pile.pop());
 				
-				if (!etatFinaux.contains(pile.peek())) {
+				for (int j = 0; j < this.getAlphabetEntree().size(); j++) {
 					
-					etatFinaux.add(pile.pop());
+					SuperEtat superEtatTemp = transiter(etatFinaux.get(i), this.getAlphabetEntree().get(j));
 					
-					
+					if (superEtatTemp != null) {
+						
+						SuperEtat superEtat = this.lambdaFermeture(superEtatTemp);
+						
+						// Creation de la transition correspondante
+						Transition tr = new Transition(etatFinaux.get(i).getNom(), this.getAlphabetEntree().get(j), superEtat.getNom());
+						
+						// Si la transition n'est pas deja existante
+						if (!transitions.contains(tr)) {
+							
+							transitions.add(tr);
+						}
+						
+						// Si l'etat n'a pas encore ete traite, on l'ajoute a la pile
+						if (!etatFinaux.contains(superEtat)) {
+								
+							pile.push(superEtat);
+							System.out.println("Creation du super-etat : " +superEtat.getNom());
+						}
+					}
 				}
 				
+				i++;
 			}
 			
-			
-			
-			
-			
-			
-			
+			// Exportation dans un nouveau format .descr correspondant
+			this.exportationDescr(etatFinaux, transitions);
+				
 		} else if (!this.avecLambda()) {									// AEFND sans #-transitions
 			
 			System.out.println("AEFND sans #-transitions");
@@ -532,7 +561,7 @@ public class Moteur {
 			Etat e = null;
 			int i = 0;
 			
-			// Si plusieurs etats initiaux (ne sert a rien)
+			// Si plusieurs etats initiaux (ne fonctionne pas)
 			if (this.getEtatInit().size() > 1) {
 				
 				String nom = "";
@@ -611,18 +640,18 @@ public class Moteur {
 		String nom = "";
 		SuperEtat s = new SuperEtat(nom);
 		
-		for (int i = 0; i < this.getTransitions().size(); i++) {
+		for (int i = 0; i < etat.getSuperEtats().size(); i++) {
 			
-			for (int j = 0; j < etat.getSuperEtats().size(); j++) {
+			for (int j = 0; j < this.getTransitions().size(); j++) {
 		
-				if (this.getTransitions().get(i).getEtatInit().equals(etat.getSuperEtats().get(j).getNom()) 
-						&& this.getTransitions().get(i).getEntree().equals(entree)) {
+				if (this.getTransitions().get(j).getEtatInit().equals(etat.getSuperEtats().get(i).getNom()) 
+						&& this.getTransitions().get(j).getEntree().equals(entree)) {
 					
-					Etat e = new Etat(this.getTransitions().get(i).getEtatFinal());
+					Etat e = new Etat(this.getTransitions().get(j).getEtatFinal());
 					
 					if (!s.getSuperEtats().contains(e)) {
 						
-						nom += this.getTransitions().get(i).getEtatFinal();
+						nom += this.getTransitions().get(j).getEtatFinal();
 						s.addEtat(e);
 					}
 				}
@@ -649,15 +678,17 @@ public class Moteur {
 	public SuperEtat lambdaFermeture(SuperEtat etat) {
 		
 		// Initialisation
+		ArrayList<String> nomTemp = new ArrayList<String>();
 		SuperEtat sortie = new SuperEtat("");
 		Stack<Etat> pile = new Stack<Etat>();
-		String nom = "";
+
 		Etat ePeek = null;
 		
-		// Empilement d'etats dans la pile
+		// Empilement d'etats dans la pile et creation du nom
 		for (int i = 0; i < etat.getSuperEtats().size(); i++) {
 			
 			pile.push(etat.getSuperEtats().get(i));
+			nomTemp.add(etat.getSuperEtats().get(i).getNom());
 		}
 		
 		while (!pile.isEmpty()) {
@@ -666,15 +697,20 @@ public class Moteur {
 			
 			if (!sortie.getSuperEtats().contains(ePeek)) {
 				
-				nom += ePeek.getNom();
 				sortie.addEtat(ePeek);
 				
 				for (int i = 0; i < this.getTransitions().size(); i++) {
 					
-					if (this.getTransitions().get(i).getEtatInit().equals(ePeek) 
-							&& this.getTransitions().get(i).getEntree().equals(this.getMeta())) {
+					if (this.getTransitions().get(i).getEtatInit().equals(ePeek.getNom()) 
+							&& this.getTransitions().get(i).getEntree().equals(Character.toString(this.getMeta()))) {
 						
-						Etat eSortie = new Etat(this.getTransitions().get(i).getSortie());
+						Etat eSortie = new Etat(this.getTransitions().get(i).getEtatFinal());
+						
+						if (!nomTemp.contains(eSortie.getNom())) {
+							
+							nomTemp.add(eSortie.getNom());
+						}
+						
 						pile.push(eSortie);
 					}
 				}
@@ -683,8 +719,31 @@ public class Moteur {
 			pile.remove(ePeek);
 		}
 		
-		sortie.setNom(nom);
+		// Renommage du nom de l'etat
+		String nomEtat = renommageEtat(nomTemp);
+		
+		sortie.setNom(nomEtat);
+		
 		return sortie;
+	}
+	
+	/**
+	 * Fonction de renommage d'un etat
+	 * 
+	 * @param nom ArrayList contenant le nom de l'etat a renommer
+	 * @return Un nouveau nom d'etat
+	 */
+	public String renommageEtat(ArrayList<String> nom) {
+		
+		Collections.sort(nom);
+		String nomFinal = "";
+		
+		for (String s : nom) {
+			
+			nomFinal += s;
+		}
+		
+		return nomFinal;
 	}
 	
 	/**
@@ -783,13 +842,13 @@ public class Moteur {
 		// Ecriture etat initial et labels
 		fw.write("\t\"\" -> " +this.getEtatInit().get(0));
 		fw.write("\n\t" +this.getEtatInit().get(0)+ " -> " +this.getTransitions().get(0).getEtatFinal());
-		fw.write(" [label=\"" +this.getTransitions().get(0).getEntree()+ "/" +this.getTransitions().get(0).getSortie()+ "\"]");
+		fw.write(" [label=\"" +this.getTransitions().get(0).getEntree()+ "\"]");
 		
 		// Ecriture autres etats et labels
 		for (int i = 1; i < this.getTransitions().size(); i++) {
 			
 			fw.write("\n\t" +this.getTransitions().get(i).getEtatInit()+ " -> " +this.getTransitions().get(i).getEtatFinal());
-			fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "/" +this.getTransitions().get(i).getSortie()+ "\"]");
+			fw.write(" [label=\"" +this.getTransitions().get(i).getEntree()+ "\"]");
 		}
 		
 		// Marquage etat initial
