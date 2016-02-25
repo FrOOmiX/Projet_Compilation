@@ -58,7 +58,15 @@ public class TestMoteur {
 		// Traitement des entrees
 		//moteur.traitementEntrees("abbbbbbbbbcaaabccccccc###");
 	}
-	
+	/**
+	 * 
+	 * Methode de verification du format du fichier .descr.
+	 * 
+	 * Utilisation de la class Pattern qui permet le verification de chaque ligne du fichier
+	 * suivant la premiere de la ligne. Si la ligne correspond à l'un des patterns ci-dessous alors la fonction renvoie true sinon false.
+	 * 
+	 * @return Vrai si la ligne match, sinon false.
+	 */
 	public static boolean verificationFichier(String nomFichier) throws IOException {
 
 		boolean fichierOk = false;
@@ -93,21 +101,25 @@ public class TestMoteur {
 				|| Pattern.matches("T[\\s][\\p{Digit}\\p{Lower}]*[\\s]\'#\'[\\s][\\p{Digit}\\p{Lower}]*", ligne)
 				){
 					fichierOk=true;
-				} else {
+				}//if
+				
+				else {
 					
 					System.out.println("Erreur de syntaxe : "+ligne+"\nmerci de respecter le format .descr.");
 					erreur=true;
 					fichierOk=false;
-				}
+				}//else
 				
 				ligne = str.readLine();
-			}
+			}//while
 			
-		} catch (FileNotFoundException e) {
+		}//try
+		
+		catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
-		}
+		}//catch
 		
 		return fichierOk;
-	}
+	}//verificationFichier
 }
