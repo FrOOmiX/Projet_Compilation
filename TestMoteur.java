@@ -11,9 +11,9 @@ public class TestMoteur {
 		// Creation moteur de base
 		Moteur moteur = null;
 		
-		if (verificationFichier("ND03.descr")) {
+		if (verificationFichier("ND01.descr")) {
 			
-			moteur = new Moteur("ND03.descr");
+			moteur = new Moteur("ND01.descr");
 			
 			System.out.println("----- Moteur de base -----\n");
 			moteur.afficherCommentaire();
