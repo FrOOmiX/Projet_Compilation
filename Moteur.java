@@ -114,7 +114,6 @@ public class Moteur {
 						String etatInitial [] = ligne.split("\\s");
 						etatInit.add(etatInitial[1]);
 						ligne = str.readLine();
-					}
 				}// If I
 
 				else if (ligne.charAt(0) == 'F' && i < ligne.length()) {
